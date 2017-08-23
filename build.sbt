@@ -1,4 +1,5 @@
 import PgpKeys.{publishLocalSigned, publishSigned}
+import com.typesafe.sbt.SbtGit.GitKeys._
 
 organization := "software.purpledragon.xml"
 version := "0.0.1"
@@ -31,9 +32,13 @@ lazy val root = project
     publishLocal := {},
     publishLocalSigned := {},
     test := {},
-    testOnly := {}
+    testOnly := {},
+    siteSubdirName in ScalaUnidoc := "api",
+    addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), siteSubdirName in ScalaUnidoc),
+    gitRemoteRepo := "git@github.com:stringbean/scala-xml-compare.git",
+    ghpagesNoJekyll := true
   )
-  .enablePlugins(ScalaUnidocPlugin)
+  .enablePlugins(ScalaUnidocPlugin, GhpagesPlugin)
 
 useGpg := true
 usePgpKeyHex("B19D7A14F6F8B3BFA9FF655A5216B5A5F723A92D")

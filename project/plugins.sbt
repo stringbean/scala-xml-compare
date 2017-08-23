@@ -13,3 +13,4 @@ addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")
 
 // documentation
 addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.4.1")
+addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.6.2")
