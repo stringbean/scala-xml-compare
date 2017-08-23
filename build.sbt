@@ -2,29 +2,30 @@ import PgpKeys.{publishLocalSigned, publishSigned}
 import com.typesafe.sbt.SbtGit.GitKeys._
 
 organization := "software.purpledragon.xml"
-version := "0.0.1"
+version := "0.0.2"
 
 scalaVersion := "2.12.3"
 crossScalaVersions := Seq("2.11.11", "2.12.3")
 
 // dependencies common for all sub-projects
 libraryDependencies ++= Seq(
-  "org.scala-lang.modules"  %% "scala-xml"  % "1.0.6",
-  "org.scalatest"           %% "scalatest"  % "3.0.4" % "test"
+  "org.scala-lang.modules"  %% "scala-xml"  % "1.0.6"
 )
 
-lazy val xmlCompare = project
-  .in(file("xml-compare"))
+lazy val xmlCompare = Project("xml-compare", file("xml-compare"))
 
-lazy val xmlScalatest = project
-  .in(file("xml-scalatest"))
+lazy val xmlScalatest = Project("xml-scalatest", file("xml-scalatest"))
+  .dependsOn(xmlCompare)
+
+lazy val xmlSpecs2 = Project("xml-specs2", file("xml-specs2"))
   .dependsOn(xmlCompare)
 
 lazy val root = project
   .in(file("."))
   .aggregate(
     xmlCompare,
-    xmlScalatest
+    xmlScalatest,
+    xmlSpecs2
   )
   .settings(
     publish := {},
