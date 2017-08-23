@@ -6,8 +6,10 @@ sealed trait XmlDiff {
 
 object XmlEqual extends XmlDiff {
   override def isEqual: Boolean = true
+
+  override def toString: String = "XmlEqual"
 }
 
-case class XmlDiffers(reason: String) extends XmlDiff {
+case class XmlDiffers(reason: String, left: Any, right: Any) extends XmlDiff {
   override def isEqual: Boolean = false
 }
