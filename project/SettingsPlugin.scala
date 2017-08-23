@@ -1,3 +1,6 @@
+import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
+import de.heikoseeberger.sbtheader.HeaderPlugin
+import de.heikoseeberger.sbtheader.HeaderPlugin.autoImport._
 import sbt._
 import sbt.Keys._
 import sbt.plugins.JvmPlugin
@@ -21,6 +24,16 @@ object SettingsPlugin extends AutoPlugin {
       "-feature",
       "-unchecked"),
     libraryDependencies ++= (libraryDependencies in LocalRootProject).value,
-    autoAPIMappings := true
+    scalafmtVersion := "1.2.0",
+    autoAPIMappings := true,
+    headerLicense := Some(HeaderLicense.ALv2("2017", "Michael Stringer")),
+    licenses += ("Apache-2.0", url("https://opensource.org/licenses/Apache-2.0")),
+    developers := List(
+      Developer("stringbean", "Michael Stringer", "@the_stringbean", url("https://github.com/stringbean"))
+    ),
+    organizationName := "Purple Dragon Software",
+    organizationHomepage := Some(url("https://purpledragon.software")),
+    homepage := Some(url("https://stringbean.github.io/scala-xml-compare")),
+    scmInfo := Some(ScmInfo(url("https://github.com/stringbean/scala-xml-compare"), "https://github.com/stringbean/scala-xml-compare.git"))
   )
 }

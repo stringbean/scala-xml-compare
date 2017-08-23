@@ -1,0 +1,24 @@
+language: scala
+sudo: false
+
+scala:
+  - 2.11.11
+  - 2.12.3
+jdk:
+  - oraclejdk8
+
+# cache config taken from http://www.scala-sbt.org/0.13/docs/Travis-CI-with-sbt.html
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt/boot/
+
+before_cache:
+  - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
+  - find $HOME/.sbt -name "*.lock" -delete
+
+# build with scoverage report and upload to codecov
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport coverageAggregate
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
