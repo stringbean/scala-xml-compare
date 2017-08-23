@@ -34,6 +34,8 @@ lazy val root = project
     publishLocalSigned := {},
     test := {},
     testOnly := {},
+    bintrayUnpublish := {},
+    bintraySyncMavenCentral := {},
     siteSubdirName in ScalaUnidoc := "api",
     addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), siteSubdirName in ScalaUnidoc),
     gitRemoteRepo := "git@github.com:stringbean/scala-xml-compare.git",
