@@ -18,4 +18,29 @@ package software.purpledragon.xml.scalatest
 
 import org.scalatest.{FlatSpec, Matchers}
 
-class XmlMatchersSpec extends FlatSpec with Matchers with XmlMatchers {}
+class XmlMatchersSpec extends FlatSpec with Matchers with XmlMatchers {
+  "beXml" should "match identical XML" in {
+    val matcher = beXml(<test>text</test>)
+
+    val matchResult = matcher(<test>text</test>)
+    matchResult.matches shouldBe true
+  }
+
+  it should "match XML with different whitespace" in {
+    val matcher = beXml(<test>text</test>)
+
+    val matchResult = matcher(
+      <test>
+        text
+      </test>)
+    matchResult.matches shouldBe true
+  }
+
+  it should "not match different XML" in {
+    val matcher = beXml(<test>text</test>)
+
+    val matchResult = matcher(<test>different</test>)
+    matchResult.matches shouldBe false
+    matchResult.failureMessage shouldBe "XML did not match - different text - text != different"
+  }
+}

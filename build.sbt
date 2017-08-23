@@ -1,9 +1,7 @@
 import PgpKeys.{publishLocalSigned, publishSigned}
 
 organization := "software.purpledragon.xml"
-version := "0.0.1-SNAPSHOT"
-
-scalaVersion := "2.11.8"
+version := "0.0.1"
 
 scalaVersion := "2.12.3"
 crossScalaVersions := Seq("2.11.11", "2.12.3")
@@ -19,6 +17,7 @@ lazy val xmlCompare = project
 
 lazy val xmlScalatest = project
   .in(file("xml-scalatest"))
+  .dependsOn(xmlCompare)
 
 lazy val root = project
   .in(file("."))

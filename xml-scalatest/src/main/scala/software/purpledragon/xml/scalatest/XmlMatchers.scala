@@ -16,12 +16,25 @@
 
 package software.purpledragon.xml.scalatest
 
-import org.scalatest.matchers.Matcher
+import org.scalatest.matchers.{MatchResult, Matcher}
+import software.purpledragon.xml.compare.XmlCompare
 
 import scala.xml.Node
 
 trait XmlMatchers {
-  def beXml(node: Node): Matcher[Node] = ???
+  def beXml(expected: Node): Matcher[Node] = new XmlMatcher(expected)
 
-  def beExactXml(node: Node): Matcher[Node] = ???
+//  def beExactXml(node: Node): Matcher[Node] = ???
+
+  class XmlMatcher(expected: Node) extends Matcher[Node] {
+    override def apply(actual: Node): MatchResult = {
+      val diff = XmlCompare.compare(expected, actual)
+
+      MatchResult(
+        diff.isEqual,
+        s"XML did not match - ${diff.message}",
+        "XML matched"
+      )
+    }
+  }
 }
