@@ -1,0 +1,5 @@
+name := "scalaxmlcompareXmlscalatest"
+
+libraryDependencies ++= Seq(
+
+)

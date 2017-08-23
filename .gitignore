@@ -1,0 +1,13 @@
+# generated dirs
+target/
+project/boot/
+project/plugins/project/
+
+# scala worksheets
+*.sc
+
+# IntelliJ
+.idea
+
+# Vim
+.*.swp
