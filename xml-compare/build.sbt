@@ -1,5 +1,1 @@
-name := "scalaxmlcompareXmlcompare"
-
-libraryDependencies ++= Seq(
-
-)
+name := "xml-compare"
