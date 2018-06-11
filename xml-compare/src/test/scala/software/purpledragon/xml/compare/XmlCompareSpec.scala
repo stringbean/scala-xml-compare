@@ -25,6 +25,10 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     XmlCompare.compare(<t:test xmlns:t="http://example.com"/>, <e:test xmlns:e="http://example.com"/>) shouldBe XmlEqual
   }
 
+  it should "match different namespace prefix on elements only" in {
+    XmlCompare.compare(<t:test>1</t:test>, <e:test>1</e:test>) shouldBe XmlEqual
+  }
+
   it should "not-match different namespace url" in {
     XmlCompare.compare(<t:test xmlns:t="http://example.com"/>, <t:test xmlns:t="http://foo.com"/>) shouldBe
       XmlDiffers("different namespace", "http://example.com", "http://foo.com")

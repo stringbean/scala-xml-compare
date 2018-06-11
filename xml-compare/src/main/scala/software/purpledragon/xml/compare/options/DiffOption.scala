@@ -16,8 +16,37 @@
 
 package software.purpledragon.xml.compare.options
 
+/**
+ * Configuration options for XML comparisons.
+ */
 object DiffOption extends Enumeration {
   type DiffOption = Value
 
-  val IgnoreNamespacePrefix, IgnoreNamespace = Value
+  /**
+   * Ignores XML namespace prefixes on elements.
+   *
+   * Enabling this makes this:
+   * {{{
+   *   <t:example xmlns:t="http://example.com">5</t:example>
+   * }}}
+   * equal to:
+   * {{{
+   *   <f:example xmlns:f="http://example.com">5</f:example>
+   * }}}
+   */
+  val IgnoreNamespacePrefix: DiffOption.Value = Value
+
+  /**
+   * Ignores XML namespaces completely.
+   *
+   * Enabling this makes this:
+   * {{{
+   *   <t:example xmlns:t="http://example.com">5</t:example>
+   * }}}
+   * equal to:
+   * {{{
+   *   <f:example xmlns:f="http://example.org">5</f:example>
+   * }}}
+   */
+  val IgnoreNamespace: DiffOption.Value = Value
 }

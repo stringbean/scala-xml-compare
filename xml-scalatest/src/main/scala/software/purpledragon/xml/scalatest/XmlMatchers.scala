@@ -21,12 +21,27 @@ import software.purpledragon.xml.compare.XmlCompare
 
 import scala.xml.Node
 
+/**
+ * Companion object to the [[XmlMatchers]] trait for use as an alternative to mixing it in.
+ */
+object XmlMatchers extends XmlMatchers
+
+/**
+ * Provides [[http://www.scalatest.org Scalatest]] matchers for checking XML documents.
+ */
 trait XmlMatchers {
+
+  /**
+   * Asserts that two XML documents are equal.
+   *
+   * Enables the following syntax:
+   * {{{
+   *   result should beXml(<example>1</example>)
+   * }}}
+   */
   def beXml(expected: Node): Matcher[Node] = new XmlMatcher(expected)
 
-//  def beExactXml(node: Node): Matcher[Node] = ???
-
-  class XmlMatcher(expected: Node) extends Matcher[Node] {
+  private class XmlMatcher(expected: Node) extends Matcher[Node] {
     override def apply(actual: Node): MatchResult = {
       val diff = XmlCompare.compare(expected, actual)
 

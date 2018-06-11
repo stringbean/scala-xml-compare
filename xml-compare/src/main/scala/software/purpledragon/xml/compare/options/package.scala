@@ -19,5 +19,9 @@ package software.purpledragon.xml.compare
 import software.purpledragon.xml.compare.options.DiffOption.DiffOption
 
 package object options {
+
+  /**
+   * Shorthand for a collection of [[DiffOption]]s.
+   */
   type DiffOptions = Set[DiffOption]
 }

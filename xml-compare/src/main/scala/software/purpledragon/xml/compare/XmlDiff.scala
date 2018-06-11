@@ -16,19 +16,36 @@
 
 package software.purpledragon.xml.compare
 
+/**
+ * Results of a comparison between XML documents. Can be either [[XmlEqual]] or [[XmlDiffers]] (with details of the
+ * differences.
+ */
 sealed trait XmlDiff {
+
+  /** `true` if the XML documents are the same. */
   def isEqual: Boolean
+
+  /** Descriptive message containing the differences (if any). */
   def message: String
 }
 
+/**
+ * Result of a successful comparison between XML documents.
+ */
 object XmlEqual extends XmlDiff {
-  override def isEqual: Boolean = true
+  override val isEqual = true
   override def toString: String = "XmlEqual"
-  override def message: String = ""
+  override val message = ""
 }
 
+/**
+ * Result of an unsuccessful comparison between XML documents.
+ *
+ * @param reason descriptive reason for the comparison failing.
+ * @param left the left-hand value in the failed comparison.
+ * @param right the right-hand value in the failed comparison.
+ */
 case class XmlDiffers(reason: String, left: Any, right: Any) extends XmlDiff {
-  override def isEqual: Boolean = false
-
-  override def message: String = s"$reason - $left != $right"
+  override val isEqual = false
+  override val message = s"$reason - $left != $right"
 }

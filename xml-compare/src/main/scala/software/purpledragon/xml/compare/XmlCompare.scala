@@ -21,11 +21,29 @@ import software.purpledragon.xml.compare.options.DiffOptions
 
 import scala.xml.{Node, Text}
 
+/**
+ * Utility for comparing XML documents.
+ */
 object XmlCompare {
   private type Check = (Node, Node, DiffOptions) => XmlDiff
 
+  /**
+   * Default [[software.purpledragon.xml.compare.options.DiffOption.DiffOption DiffOption]]s to use during XML comparison.
+   *
+   * Currently these are:
+   *  - [[software.purpledragon.xml.compare.options.DiffOption.IgnoreNamespacePrefix IgnoreNamespacePrefix]]
+   */
   val DefaultOptions: DiffOptions = Set(IgnoreNamespacePrefix)
 
+  /**
+   * Compares two XML documents. This will perform a recursive scan of all the nodes in each document, checking each
+   * for node name, namespace and text.
+   *
+   * @param left the first XML document to compare.
+   * @param right the second XML document to compare.
+   * @param options configuration options to control the way the comparison is performed.
+   * @return results of the XML comparison.
+   */
   def compare(left: Node, right: Node, options: DiffOptions = DefaultOptions): XmlDiff = {
     val checks: Seq[Check] = Seq(
       compareNamespace,
