@@ -8,7 +8,7 @@ import scala.xml.{Node, Text}
 object XmlCompare {
   private type Check = (Node, Node, DiffOptions) => XmlDiff
 
-  val DefaultOptions: DiffOptions = Set(IgnorePrefix)
+  val DefaultOptions: DiffOptions = Set(IgnoreNamespacePrefix)
 
   def compare(left: Node, right: Node, options: DiffOptions = DefaultOptions): XmlDiff = {
     val checks: Seq[Check] = Seq(
@@ -30,18 +30,19 @@ object XmlCompare {
   private def compareNamespace(left: Node, right: Node, options: DiffOptions): XmlDiff = {
     if (left.label != right.label) {
       XmlDiffers("different label", left.label, right.label)
-    } else if (left.namespace != right.namespace) {
+    } else if (left.namespace != right.namespace && !options.contains(IgnoreNamespace)) {
       XmlDiffers("different namespace", left.namespace, right.namespace)
-    } else if (left.prefix != right.prefix && !options.contains(IgnorePrefix)) {
-      XmlDiffers("different prefix", left.prefix, right.prefix)
+    } else if (left.prefix != right.prefix && !options.contains(IgnoreNamespacePrefix) &&
+               !options.contains(IgnoreNamespace)) {
+      XmlDiffers("different namespace prefix", left.prefix, right.prefix)
     } else {
       XmlEqual
     }
   }
 
   private def compareText(left: Node, right: Node, options: DiffOptions): XmlDiff = {
-    val leftText = left.child.collect({case t: Text => t}).map(_.text.trim).mkString
-    val rightText = right.child.collect({case t: Text => t}).map(_.text.trim).mkString
+    val leftText = left.child.collect({ case t: Text => t }).map(_.text.trim).mkString
+    val rightText = right.child.collect({ case t: Text => t }).map(_.text.trim).mkString
 
     if (leftText != rightText) {
       XmlDiffers("different text", leftText, rightText)
@@ -57,15 +58,14 @@ object XmlCompare {
     if (leftChildren.size != rightChildren.size) {
       XmlDiffers("child count", leftChildren.size, rightChildren.size)
     } else {
-      val matchedChildren = leftChildren.zip(rightChildren)
-
-      matchedChildren.foldLeft[XmlDiff](XmlEqual) { case (status, (leftChild, rightChild)) =>
-        if (!status.isEqual) {
-          // already failed
-          status
-        } else {
-          compare(leftChild, rightChild, options)
-        }
+      leftChildren.zip(rightChildren).foldLeft[XmlDiff](XmlEqual) {
+        case (status, (leftChild, rightChild)) =>
+          if (!status.isEqual) {
+            // already failed
+            status
+          } else {
+            compare(leftChild, rightChild, options)
+          }
       }
     }
   }
