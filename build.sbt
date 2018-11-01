@@ -9,7 +9,7 @@ crossScalaVersions := Seq(scalaVersion.value, "2.11.12")
 
 // dependencies common for all sub-projects
 libraryDependencies ++= Seq(
-  "org.scala-lang.modules"  %% "scala-xml"  % "1.1.0"
+  "org.scala-lang.modules"  %% "scala-xml"  % "1.1.1"
 )
 
 lazy val xmlCompare = Project("xml-compare", file("xml-compare"))
