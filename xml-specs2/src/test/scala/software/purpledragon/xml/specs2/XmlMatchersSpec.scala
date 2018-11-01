@@ -32,8 +32,7 @@ class XmlMatchersSpec extends Specification with XmlMatchers with Expectations {
     "match XML with different whitespace" in {
       val matcher = beXml(<test>text</test>)
 
-      val matchResult = matcher(createExpectable(
-        <test>
+      val matchResult = matcher(createExpectable(<test>
           text
         </test>))
       matchResult.isSuccess === true
@@ -44,8 +43,23 @@ class XmlMatchersSpec extends Specification with XmlMatchers with Expectations {
 
       val matchResult = matcher(createExpectable(<test>different</test>))
       matchResult.isSuccess === false
-      matchResult.message === "XML did not match - different text - text != different"
+      matchResult.message === "XML did not match at [test]: different text: [text] != [different]"
+    }
+
+    "not match different nested XML" in {
+      val matcher = beXml(<test><nested>text</nested></test>)
+
+      val matchResult = matcher(createExpectable(<test><nested>different</nested></test>))
+      matchResult.isSuccess === false
+      matchResult.message === "XML did not match at [test / nested]: different text: [text] != [different]"
+    }
+
+    "not match different namespaced XML" in {
+      val matcher = beXml(<t:test>text</t:test>)
+
+      val matchResult = matcher(createExpectable(<f:test>different</f:test>))
+      matchResult.isSuccess === false
+      matchResult.message === "XML did not match at [t:test]: different text: [text] != [different]"
     }
   }
 }
-

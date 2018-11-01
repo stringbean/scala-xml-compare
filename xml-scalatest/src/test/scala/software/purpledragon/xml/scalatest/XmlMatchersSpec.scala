@@ -29,8 +29,7 @@ class XmlMatchersSpec extends FlatSpec with Matchers with XmlMatchers {
   it should "match XML with different whitespace" in {
     val matcher = beXml(<test>text</test>)
 
-    val matchResult = matcher(
-      <test>
+    val matchResult = matcher(<test>
         text
       </test>)
     matchResult.matches shouldBe true
@@ -41,6 +40,22 @@ class XmlMatchersSpec extends FlatSpec with Matchers with XmlMatchers {
 
     val matchResult = matcher(<test>different</test>)
     matchResult.matches shouldBe false
-    matchResult.failureMessage shouldBe "XML did not match - different text - text != different"
+    matchResult.failureMessage shouldBe "XML did not match at [test]: different text: [text] != [different]"
+  }
+
+  it should "not match different nested XML" in {
+    val matcher = beXml(<test><nested>text</nested></test>)
+
+    val matchResult = matcher(<test><nested>different</nested></test>)
+    matchResult.matches shouldBe false
+    matchResult.failureMessage shouldBe "XML did not match at [test / nested]: different text: [text] != [different]"
+  }
+
+  it should "not match different namespaced XML" in {
+    val matcher = beXml(<t:test>text</t:test>)
+
+    val matchResult = matcher(<f:test>different</f:test>)
+    matchResult.matches shouldBe false
+    matchResult.failureMessage shouldBe "XML did not match at [t:test]: different text: [text] != [different]"
   }
 }

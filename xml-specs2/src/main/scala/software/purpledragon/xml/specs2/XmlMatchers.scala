@@ -43,6 +43,17 @@ trait XmlMatchers {
   def beXml(expected: Node): Matcher[Node] = { actual: Node =>
     val diff = XmlCompare.compare(expected, actual)
 
-    (diff.isEqual, "XML matched", s"XML did not match - ${diff.message}")
+    val failureBuilder = new StringBuilder()
+    failureBuilder ++= "XML did not match"
+
+    if (diff.failurePath.nonEmpty) {
+      failureBuilder ++= " at "
+      diff.failurePath.addString(failureBuilder, "[", " / ", "]")
+    }
+
+    failureBuilder ++= ": "
+    failureBuilder ++= diff.message
+
+    (diff.isEqual, "XML matched", failureBuilder.toString())
   }
 }

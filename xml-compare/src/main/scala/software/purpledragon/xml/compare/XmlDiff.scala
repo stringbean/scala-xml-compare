@@ -52,5 +52,5 @@ object XmlEqual extends XmlDiff {
  */
 case class XmlDiffers(reason: String, left: Any, right: Any, failurePath: Seq[String]) extends XmlDiff {
   override val isEqual = false
-  override val message = s"$reason - $left != $right"
+  override val message = s"$reason: [$left] != [$right]"
 }

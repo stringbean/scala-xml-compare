@@ -45,9 +45,20 @@ trait XmlMatchers {
     override def apply(actual: Node): MatchResult = {
       val diff = XmlCompare.compare(expected, actual)
 
+      val failureBuilder = new StringBuilder()
+      failureBuilder ++= "XML did not match"
+
+      if (diff.failurePath.nonEmpty) {
+        failureBuilder ++= " at "
+        diff.failurePath.addString(failureBuilder, "[", " / ", "]")
+      }
+
+      failureBuilder ++= ": "
+      failureBuilder ++= diff.message
+
       MatchResult(
         diff.isEqual,
-        s"XML did not match - ${diff.message}",
+        failureBuilder.toString(),
         "XML matched"
       )
     }
