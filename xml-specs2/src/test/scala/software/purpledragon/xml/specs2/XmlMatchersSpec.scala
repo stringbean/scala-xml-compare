@@ -18,6 +18,7 @@ package software.purpledragon.xml.specs2
 
 import org.specs2.matcher.Expectations
 import org.specs2.mutable.Specification
+import software.purpledragon.xml.compare.options.DiffOptions
 
 class XmlMatchersSpec extends Specification with XmlMatchers with Expectations {
 
@@ -35,6 +36,13 @@ class XmlMatchersSpec extends Specification with XmlMatchers with Expectations {
       val matchResult = matcher(createExpectable(<test>
           text
         </test>))
+      matchResult.isSuccess === true
+    }
+
+    "match XML with different namespace" in {
+      val matcher = beXml(<ns1:test>text</ns1:test>)
+
+      val matchResult = matcher(createExpectable(<ns2:test>text</ns2:test>))
       matchResult.isSuccess === true
     }
 
@@ -60,6 +68,27 @@ class XmlMatchersSpec extends Specification with XmlMatchers with Expectations {
       val matchResult = matcher(createExpectable(<f:test>different</f:test>))
       matchResult.isSuccess === false
       matchResult.message === "XML did not match at [t:test]: different text: [text] != [different]"
+    }
+  }
+
+  "beXml(xml)(options)" should {
+    "not match XML with different namespace" in {
+      val matcher = beXml(<ns1:test>text</ns1:test>)(Set.empty)
+
+      val matchResult = matcher(createExpectable(<ns2:test>text</ns2:test>))
+      matchResult.isSuccess === false
+      matchResult.message === "XML did not match at [ns1:test]: different namespace prefix: [ns1] != [ns2]"
+    }
+  }
+
+  "beXml(xml) with implicit options" should {
+    "not match XML with different namespace" in {
+      implicit val options: DiffOptions = Set.empty
+      val matcher = beXml(<ns1:test>text</ns1:test>)
+
+      val matchResult = matcher(createExpectable(<ns2:test>text</ns2:test>))
+      matchResult.isSuccess === false
+      matchResult.message === "XML did not match at [ns1:test]: different namespace prefix: [ns1] != [ns2]"
     }
   }
 }

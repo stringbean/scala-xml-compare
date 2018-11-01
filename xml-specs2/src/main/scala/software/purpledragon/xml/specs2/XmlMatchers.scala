@@ -19,6 +19,7 @@ package software.purpledragon.xml.specs2
 import org.specs2.matcher.Matcher
 import org.specs2.matcher.MatchersImplicits._
 import software.purpledragon.xml.compare.XmlCompare
+import software.purpledragon.xml.compare.options.DiffOptions
 
 import scala.xml.Node
 
@@ -39,21 +40,34 @@ trait XmlMatchers {
    * {{{
    *   result must beXml(<example>1</example>)
    * }}}
+   *
+   * If unspecified this will use [[software.purpledragon.xml.compare.XmlCompare.DefaultOptions XmlCompare.DefaultOptions]]
+   * during the comparison. This can be overridden with a global implicit of
+   * [[software.purpledragon.xml.compare.options.DiffOptions DiffOptions]] or on an individual basis:
+   *
+   * {{{
+   *   implicit val diffOptions: DiffOptions = Set(IgnoreNamespace)
+   *   result must beXml(<example>1</example>)
+   *
+   *   // or
+   *   result must beXml(<example>1</example>)(Set.empty)
+   * }}}
    */
-  def beXml(expected: Node): Matcher[Node] = { actual: Node =>
-    val diff = XmlCompare.compare(expected, actual)
+  def beXml(expected: Node)(implicit options: DiffOptions = XmlCompare.DefaultOptions): Matcher[Node] = {
+    actual: Node =>
+      val diff = XmlCompare.compare(expected, actual, options)
 
-    val failureBuilder = new StringBuilder()
-    failureBuilder ++= "XML did not match"
+      val failureBuilder = new StringBuilder()
+      failureBuilder ++= "XML did not match"
 
-    if (diff.failurePath.nonEmpty) {
-      failureBuilder ++= " at "
-      diff.failurePath.addString(failureBuilder, "[", " / ", "]")
-    }
+      if (diff.failurePath.nonEmpty) {
+        failureBuilder ++= " at "
+        diff.failurePath.addString(failureBuilder, "[", " / ", "]")
+      }
 
-    failureBuilder ++= ": "
-    failureBuilder ++= diff.message
+      failureBuilder ++= ": "
+      failureBuilder ++= diff.message
 
-    (diff.isEqual, "XML matched", failureBuilder.toString())
+      (diff.isEqual, "XML matched", failureBuilder.toString())
   }
 }
