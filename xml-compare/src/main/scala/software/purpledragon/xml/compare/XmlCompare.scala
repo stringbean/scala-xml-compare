@@ -109,6 +109,6 @@ object XmlCompare {
   }
 
   private def extendPath(path: Seq[String], node: Node): Seq[String] = {
-    path :+ node.nameToString(StringBuilder.newBuilder).toString
+    path :+ node.nameToString(new StringBuilder()).toString
   }
 }
