@@ -13,12 +13,24 @@ libraryDependencies ++= Seq(
 )
 
 lazy val xmlCompare = Project("xml-compare", file("xml-compare"))
+  .settings(
+    previewSite := {},
+    previewAuto := {}
+  )
 
 lazy val xmlScalatest = Project("xml-scalatest", file("xml-scalatest"))
   .dependsOn(xmlCompare)
+  .settings(
+    previewSite := {},
+    previewAuto := {}
+  )
 
 lazy val xmlSpecs2 = Project("xml-specs2", file("xml-specs2"))
   .dependsOn(xmlCompare)
+  .settings(
+    previewSite := {},
+    previewAuto := {}
+  )
 
 lazy val root = project
   .in(file("."))
@@ -39,6 +51,13 @@ lazy val root = project
     siteSubdirName in ScalaUnidoc := "api",
     addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), siteSubdirName in ScalaUnidoc),
     gitRemoteRepo := "git@github.com:stringbean/scala-xml-compare.git",
-    ghpagesNoJekyll := true
+    ghpagesNoJekyll := true,
+    paradoxTheme := Some(builtinParadoxTheme("generic")),
+    sourceDirectory in Paradox := baseDirectory.value / "docs",
+    sourceDirectory in Paradox in paradoxTheme := baseDirectory.value / "docs" / "_template",
+    git.remoteRepo := "git@github.com:stringbean/scala-xml-compare.git",
+    paradoxProperties in Paradox ++= Map(
+      "scaladoc.software.purpledragon.xml.base_url" -> ".../api"
+    )
   )
-  .enablePlugins(ScalaUnidocPlugin, GhpagesPlugin)
+  .enablePlugins(ScalaUnidocPlugin, GhpagesPlugin, ParadoxSitePlugin)
