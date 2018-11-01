@@ -2,7 +2,7 @@ import PgpKeys.{publishLocalSigned, publishSigned}
 import com.typesafe.sbt.SbtGit.GitKeys._
 
 organization := "software.purpledragon.xml"
-version := "0.0.3"
+version := "0.0.4-SNAPSHOT"
 
 scalaVersion := "2.12.7"
 crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.13.0-M5")
@@ -58,6 +58,9 @@ lazy val root = project
     git.remoteRepo := "git@github.com:stringbean/scala-xml-compare.git",
     paradoxProperties in Paradox ++= Map(
       "scaladoc.software.purpledragon.xml.base_url" -> ".../api"
+    ),
+    scalacOptions in Compile in doc ++= Seq(
+      "-doc-root-content", baseDirectory.value + "/root-scaladoc.txt"
     )
   )
   .enablePlugins(ScalaUnidocPlugin, GhpagesPlugin, ParadoxSitePlugin)

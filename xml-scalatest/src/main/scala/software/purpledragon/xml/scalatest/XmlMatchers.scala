@@ -18,21 +18,61 @@ package software.purpledragon.xml.scalatest
 
 import org.scalatest.matchers.{MatchResult, Matcher}
 import software.purpledragon.xml.compare.XmlCompare
+import software.purpledragon.xml.compare.options.DiffOptions
 
 import scala.xml.Node
 
+/**
+ * Companion object to the [[XmlMatchers]] trait for use as an alternative to mixing it in.
+ */
+object XmlMatchers extends XmlMatchers
+
+/**
+ * Provides [[http://www.scalatest.org Scalatest]] matchers for checking XML documents.
+ */
 trait XmlMatchers {
-  def beXml(expected: Node): Matcher[Node] = new XmlMatcher(expected)
 
-//  def beExactXml(node: Node): Matcher[Node] = ???
+  /**
+   * Asserts that two XML documents are equal.
+   *
+   * Enables the following syntax:
+   * {{{
+   *   result should beXml(<example>1</example>)
+   * }}}
+   *
+   * If unspecified this will use [[software.purpledragon.xml.compare.XmlCompare.DefaultOptions XmlCompare.DefaultOptions]]
+   * during the comparison. This can be overridden with a global implicit of
+   * [[software.purpledragon.xml.compare.options.DiffOptions DiffOptions]] or on an individual basis:
+   *
+   * {{{
+   *   implicit val diffOptions: DiffOptions = Set(IgnoreNamespace)
+   *   result should beXml(<example>1</example>)
+   *
+   *   // or
+   *   result should beXml(<example>1</example>)(Set.empty)
+   * }}}
+   */
+  def beXml(expected: Node)(implicit options: DiffOptions = XmlCompare.DefaultOptions): Matcher[Node] =
+    new XmlMatcher(expected, options)
 
-  class XmlMatcher(expected: Node) extends Matcher[Node] {
+  private class XmlMatcher(expected: Node, options: DiffOptions) extends Matcher[Node] {
     override def apply(actual: Node): MatchResult = {
-      val diff = XmlCompare.compare(expected, actual)
+      val diff = XmlCompare.compare(expected, actual, options)
+
+      val failureBuilder = new StringBuilder()
+      failureBuilder ++= "XML did not match"
+
+      if (diff.failurePath.nonEmpty) {
+        failureBuilder ++= " at "
+        diff.failurePath.addString(failureBuilder, "[", " / ", "]")
+      }
+
+      failureBuilder ++= ": "
+      failureBuilder ++= diff.message
 
       MatchResult(
         diff.isEqual,
-        s"XML did not match - ${diff.message}",
+        failureBuilder.toString(),
         "XML matched"
       )
     }
