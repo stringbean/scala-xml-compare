@@ -8,7 +8,15 @@ object SettingsPlugin extends AutoPlugin {
   override def trigger: PluginTrigger = AllRequirements
   override def requires: Plugins = JvmPlugin
 
-  val javaVersion = "1.8"
+  private val javaVersion = "1.8"
+  private val scalatestStable = "3.0.5"
+  private val scalatestSnapshot = "3.0.6-SNAP4"
+
+  object autoImport {
+    val scalatestVersion = settingKey[String]("Version of scalatest to use")
+  }
+
+  import autoImport._
 
   override def projectSettings: Seq[Setting[_]] = Seq(
     organization := (organization in LocalRootProject).value,
@@ -33,6 +41,12 @@ object SettingsPlugin extends AutoPlugin {
     organizationName := "Purple Dragon Software",
     organizationHomepage := Some(url("https://purpledragon.software")),
     homepage := Some(url("https://stringbean.github.io/scala-xml-compare")),
-    scmInfo := Some(ScmInfo(url("https://github.com/stringbean/scala-xml-compare"), "https://github.com/stringbean/scala-xml-compare.git"))
+    scmInfo := Some(ScmInfo(url("https://github.com/stringbean/scala-xml-compare"), "https://github.com/stringbean/scala-xml-compare.git")),
+    scalatestVersion := {
+      scalaVersion.value match {
+        case "2.13.0-M5" => scalatestSnapshot
+        case _ => scalatestStable
+      }
+    }
   )
 }

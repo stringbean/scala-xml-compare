@@ -57,9 +57,9 @@ object XmlCompare {
     if (leftChildren.size != rightChildren.size) {
       XmlDiffers("child count", leftChildren.size, rightChildren.size)
     } else {
-      val meh: Seq[(Node, Node)] = leftChildren.zip(rightChildren)
+      val matchedChildren = leftChildren.zip(rightChildren)
 
-      meh.foldLeft[XmlDiff](XmlEqual) { case (status, (leftChild, rightChild)) =>
+      matchedChildren.foldLeft[XmlDiff](XmlEqual) { case (status, (leftChild, rightChild)) =>
         if (!status.isEqual) {
           // already failed
           status
