@@ -65,10 +65,11 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="" href="../../../../index.html"><span class="name">root</span></a>
+        <a title="This is the documentation for the scala-xml-compare project." href="../../../../index.html"><span class="name">root</span></a>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+      <p class="shortcomment cmt">This is the documentation for the <a href="https://stringbean.github.io/scala-xml-compare" target="_blank">scala-xml-compare</a> project.</p><div class="fullcomment"><div class="comment cmt"><p>This is the documentation for the <a href="https://stringbean.github.io/scala-xml-compare" target="_blank">scala-xml-compare</a> project.</p><p>The main <a href="index.html" class="extype" name="software.purpledragon.xml.compare">compare</a> package contains utilities for comparing XML documents and
+generating diffs.</p><p>The following test frameworks are supported:</p><ul><li>Scalatest in <a href="../scalatest/index.html" class="extype" name="software.purpledragon.xml.scalatest"><code>xml-scalatest</code></a></li><li>specs2 in <a href="../specs2/index.html" class="extype" name="software.purpledragon.xml.specs2"><code>xml-specs2</code></a></li></ul></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="_root_.software" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="software"></a><a id="software:software"></a>
       <span class="permalink">
@@ -151,20 +152,20 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="software.purpledragon.xml.compare">compare</a></dd></dl></div>
     </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="object" href="XmlCompare$.html" title=""></a>
-                        <a href="XmlCompare$.html" title="">XmlCompare</a>
+                        <a class="object" href="XmlCompare$.html" title="Utility for comparing XML documents."></a>
+                        <a href="XmlCompare$.html" title="Utility for comparing XML documents.">XmlCompare</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="" title=""></a>
-                        <a href="" title="">XmlDiff</a>
+                        <a class="trait" href="" title="Results of a comparison between XML documents."></a>
+                        <a href="" title="Results of a comparison between XML documents.">XmlDiff</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="class" href="XmlDiffers.html" title=""></a>
-                        <a href="XmlDiffers.html" title="">XmlDiffers</a>
+                        <a class="class" href="XmlDiffers.html" title="Result of an unsuccessful comparison between XML documents."></a>
+                        <a href="XmlDiffers.html" title="Result of an unsuccessful comparison between XML documents.">XmlDiffers</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="object" href="XmlEqual$.html" title=""></a>
-                        <a href="XmlEqual$.html" title="">XmlEqual</a>
+                        <a class="object" href="XmlEqual$.html" title="Result of a successful comparison between XML documents."></a>
+                        <a href="XmlEqual$.html" title="Result of a successful comparison between XML documents.">XmlEqual</a>
                       </li>
               </ul>
             </div>
@@ -193,7 +194,9 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Results of a comparison between XML documents. Can be either <a href="XmlEqual$.html" class="extype" name="software.purpledragon.xml.compare.XmlEqual">XmlEqual</a> or <a href="XmlDiffers.html" class="extype" name="software.purpledragon.xml.compare.XmlDiffers">XmlDiffers</a> (with details of the
+differences).
+</p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -252,7 +255,23 @@
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="software.purpledragon.xml.compare.XmlDiff#isEqual" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="software.purpledragon.xml.compare.XmlDiff#failurePath" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="failurePath:Seq[String]"></a>
+      <span class="permalink">
+      <a href="../../../../software/purpledragon/xml/compare/XmlDiff.html#failurePath:Seq[String]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">failurePath</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Path of the first difference (if any).</p>
+    </li><li name="software.purpledragon.xml.compare.XmlDiff#isEqual" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="isEqual:Boolean"></a>
       <span class="permalink">
       <a href="../../../../software/purpledragon/xml/compare/XmlDiff.html#isEqual:Boolean" title="Permalink">
@@ -267,7 +286,7 @@
         <span class="name">isEqual</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt"><code>true</code> if the XML documents are the same.</p>
     </li><li name="software.purpledragon.xml.compare.XmlDiff#message" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="message:String"></a>
       <span class="permalink">
@@ -283,7 +302,7 @@
         <span class="name">message</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Descriptive message containing the differences (if any).</p>
     </li></ol>
             </div>
 

@@ -65,10 +65,11 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="" href="../../../../../index.html"><span class="name">root</span></a>
+        <a title="This is the documentation for the scala-xml-compare project." href="../../../../../index.html"><span class="name">root</span></a>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
+      <p class="shortcomment cmt">This is the documentation for the <a href="https://stringbean.github.io/scala-xml-compare" target="_blank">scala-xml-compare</a> project.</p><div class="fullcomment"><div class="comment cmt"><p>This is the documentation for the <a href="https://stringbean.github.io/scala-xml-compare" target="_blank">scala-xml-compare</a> project.</p><p>The main <a href="../index.html" class="extype" name="software.purpledragon.xml.compare">compare</a> package contains utilities for comparing XML documents and
+generating diffs.</p><p>The following test frameworks are supported:</p><ul><li>Scalatest in <a href="../../scalatest/index.html" class="extype" name="software.purpledragon.xml.scalatest"><code>xml-scalatest</code></a></li><li>specs2 in <a href="../../specs2/index.html" class="extype" name="software.purpledragon.xml.specs2"><code>xml-specs2</code></a></li></ul></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../../../../index.html" class="extype" name="_root_">root</a></dd></dl></div>
     </li><li name="_root_.software" visbl="pub" class="indented1 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="software"></a><a id="software:software"></a>
       <span class="permalink">
@@ -151,8 +152,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="software.purpledragon.xml.compare">compare</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="" title=""></a>
-                        <a href="" title="">DiffOption</a>
+                        <a class="object" href="" title="Configuration options for XML comparisons."></a>
+                        <a href="" title="Configuration options for XML comparisons.">DiffOption</a>
                       </li>
               </ul>
             </div>
@@ -181,7 +182,8 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Configuration options for XML comparisons.
+</p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -359,10 +361,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="software.purpledragon.xml.compare.options.DiffOption#IgnorePrefix" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="IgnorePrefix:software.purpledragon.xml.compare.options.DiffOption.type"></a><a id="IgnorePrefix:DiffOption.type"></a>
+    </li><li name="software.purpledragon.xml.compare.options.DiffOption#IgnoreNamespace" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="IgnoreNamespace:software.purpledragon.xml.compare.options.DiffOption.Value"></a><a id="IgnoreNamespace:Value"></a>
       <span class="permalink">
-      <a href="../../../../../software/purpledragon/xml/compare/options/DiffOption$.html#IgnorePrefix:software.purpledragon.xml.compare.options.DiffOption.type" title="Permalink">
+      <a href="../../../../../software/purpledragon/xml/compare/options/DiffOption$.html#IgnoreNamespace:software.purpledragon.xml.compare.options.DiffOption.Value" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -371,10 +373,26 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">IgnorePrefix</span><span class="result">: <a href="" class="extype" name="software.purpledragon.xml.compare.options.DiffOption">DiffOption</a>.type</span>
+        <span class="name">IgnoreNamespace</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="software.purpledragon.xml.compare.options.DiffOption.Value">Value</a></span>
       </span>
       
+      <p class="shortcomment cmt">Ignores XML namespaces completely.</p><div class="fullcomment"><div class="comment cmt"><p>Ignores XML namespaces completely.</p><p>Enabling this makes this:</p><pre>&lt;t:example xmlns:t=<span class="lit">"http://example.com"</span>&gt;<span class="num">5</span>&lt;/t:example&gt;</pre><p>equal to:</p><pre>&lt;f:example xmlns:f=<span class="lit">"http://example.org"</span>&gt;<span class="num">5</span>&lt;/f:example&gt;</pre></div></div>
+    </li><li name="software.purpledragon.xml.compare.options.DiffOption#IgnoreNamespacePrefix" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="IgnoreNamespacePrefix:software.purpledragon.xml.compare.options.DiffOption.Value"></a><a id="IgnoreNamespacePrefix:Value"></a>
+      <span class="permalink">
+      <a href="../../../../../software/purpledragon/xml/compare/options/DiffOption$.html#IgnoreNamespacePrefix:software.purpledragon.xml.compare.options.DiffOption.Value" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">IgnoreNamespacePrefix</span><span class="result">: <a href="#ValueextendsOrdered[Enumeration.this.Value]withSerializable" class="extmbr" name="software.purpledragon.xml.compare.options.DiffOption.Value">Value</a></span>
+      </span>
       
+      <p class="shortcomment cmt">Ignores XML namespace prefixes on elements.</p><div class="fullcomment"><div class="comment cmt"><p>Ignores XML namespace prefixes on elements.</p><p>Enabling this makes this:</p><pre>&lt;t:example xmlns:t=<span class="lit">"http://example.com"</span>&gt;<span class="num">5</span>&lt;/t:example&gt;</pre><p>equal to:</p><pre>&lt;f:example xmlns:f=<span class="lit">"http://example.com"</span>&gt;<span class="num">5</span>&lt;/f:example&gt;</pre></div></div>
     </li><li name="scala.Enumeration#Value" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Value(i:Int,name:String):Enumeration.this.Value"></a><a id="Value(Int,String):Value"></a>
       <span class="permalink">
