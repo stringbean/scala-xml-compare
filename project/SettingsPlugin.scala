@@ -1,8 +1,7 @@
 import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
-import de.heikoseeberger.sbtheader.HeaderPlugin
 import de.heikoseeberger.sbtheader.HeaderPlugin.autoImport._
-import sbt._
 import sbt.Keys._
+import sbt._
 import sbt.plugins.JvmPlugin
 
 object SettingsPlugin extends AutoPlugin {
@@ -24,7 +23,7 @@ object SettingsPlugin extends AutoPlugin {
       "-feature",
       "-unchecked"),
     libraryDependencies ++= (libraryDependencies in LocalRootProject).value,
-    scalafmtVersion := "1.2.0",
+    scalafmtVersion := "1.5.1",
     autoAPIMappings := true,
     headerLicense := Some(HeaderLicense.ALv2("2017", "Michael Stringer")),
     licenses += ("Apache-2.0", url("https://opensource.org/licenses/Apache-2.0")),
