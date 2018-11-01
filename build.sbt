@@ -58,6 +58,9 @@ lazy val root = project
     git.remoteRepo := "git@github.com:stringbean/scala-xml-compare.git",
     paradoxProperties in Paradox ++= Map(
       "scaladoc.software.purpledragon.xml.base_url" -> ".../api"
+    ),
+    scalacOptions in Compile in doc ++= Seq(
+      "-doc-root-content", baseDirectory.value + "/root-scaladoc.txt"
     )
   )
   .enablePlugins(ScalaUnidocPlugin, GhpagesPlugin, ParadoxSitePlugin)

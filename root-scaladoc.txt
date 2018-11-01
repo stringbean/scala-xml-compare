@@ -1,0 +1,8 @@
+This is the documentation for the [[https://stringbean.github.io/scala-xml-compare scala-xml-compare]] project.
+
+The main [[software.purpledragon.xml.compare compare]] package contains utilities for comparing XML documents and
+generating diffs.
+
+The following test frameworks are supported:
+  - Scalatest in [[software.purpledragon.xml.scalatest `xml-scalatest`]]
+  - specs2 in [[software.purpledragon.xml.specs2 `xml-specs2`]]

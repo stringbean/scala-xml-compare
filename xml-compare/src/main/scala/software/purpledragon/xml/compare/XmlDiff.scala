@@ -18,7 +18,7 @@ package software.purpledragon.xml.compare
 
 /**
  * Results of a comparison between XML documents. Can be either [[XmlEqual]] or [[XmlDiffers]] (with details of the
- * differences.
+ * differences).
  */
 sealed trait XmlDiff {
 
