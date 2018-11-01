@@ -2,7 +2,7 @@ import PgpKeys.{publishLocalSigned, publishSigned}
 import com.typesafe.sbt.SbtGit.GitKeys._
 
 organization := "software.purpledragon.xml"
-version := "0.0.4-SNAPSHOT"
+version := "1.0.0"
 
 scalaVersion := "2.12.7"
 crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.13.0-M5")
