@@ -94,7 +94,7 @@ object XmlCompare {
     val rightChildren = right.child.filterNot(_.isInstanceOf[Text])
 
     if (leftChildren.size != rightChildren.size) {
-      XmlDiffers("child count", leftChildren.size, rightChildren.size, path)
+      XmlDiffers("different child count", leftChildren.size, rightChildren.size, extendPath(path, left))
     } else {
       leftChildren.zip(rightChildren).foldLeft[XmlDiff](XmlEqual) {
         case (status, (leftChild, rightChild)) =>
