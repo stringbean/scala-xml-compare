@@ -25,7 +25,7 @@ import scala.xml.{Node, Text}
  * Utility for comparing XML documents.
  */
 object XmlCompare {
-  private type Check = (Node, Node, DiffOptions) => XmlDiff
+  private type Check = (Node, Node, DiffOptions, Seq[String]) => XmlDiff
 
   /**
    * Default [[software.purpledragon.xml.compare.options.DiffOption.DiffOption DiffOption]]s to use during XML comparison.
@@ -45,6 +45,10 @@ object XmlCompare {
    * @return results of the XML comparison.
    */
   def compare(left: Node, right: Node, options: DiffOptions = DefaultOptions): XmlDiff = {
+    compareNodes(left, right, options, Nil)
+  }
+
+  private def compareNodes(left: Node, right: Node, options: DiffOptions, path: Seq[String]): XmlDiff = {
     val checks: Seq[Check] = Seq(
       compareNamespace,
       compareText,
@@ -56,41 +60,41 @@ object XmlCompare {
         // already failed
         status
       } else {
-        check(left, right, options)
+        check(left, right, options, path)
       }
     }
   }
 
-  private def compareNamespace(left: Node, right: Node, options: DiffOptions): XmlDiff = {
+  private def compareNamespace(left: Node, right: Node, options: DiffOptions, path: Seq[String]): XmlDiff = {
     if (left.label != right.label) {
-      XmlDiffers("different label", left.label, right.label)
+      XmlDiffers("different label", left.label, right.label, extendPath(path, left))
     } else if (left.namespace != right.namespace && !options.contains(IgnoreNamespace)) {
-      XmlDiffers("different namespace", left.namespace, right.namespace)
+      XmlDiffers("different namespace", left.namespace, right.namespace, extendPath(path, left))
     } else if (left.prefix != right.prefix && !options.contains(IgnoreNamespacePrefix) &&
                !options.contains(IgnoreNamespace)) {
-      XmlDiffers("different namespace prefix", left.prefix, right.prefix)
+      XmlDiffers("different namespace prefix", left.prefix, right.prefix, extendPath(path, left))
     } else {
       XmlEqual
     }
   }
 
-  private def compareText(left: Node, right: Node, options: DiffOptions): XmlDiff = {
+  private def compareText(left: Node, right: Node, options: DiffOptions, path: Seq[String]): XmlDiff = {
     val leftText = left.child.collect({ case t: Text => t }).map(_.text.trim).mkString
     val rightText = right.child.collect({ case t: Text => t }).map(_.text.trim).mkString
 
     if (leftText != rightText) {
-      XmlDiffers("different text", leftText, rightText)
+      XmlDiffers("different text", leftText, rightText, extendPath(path, left))
     } else {
       XmlEqual
     }
   }
 
-  private def compareChildren(left: Node, right: Node, options: DiffOptions): XmlDiff = {
+  private def compareChildren(left: Node, right: Node, options: DiffOptions, path: Seq[String]): XmlDiff = {
     val leftChildren = left.child.filterNot(_.isInstanceOf[Text])
     val rightChildren = right.child.filterNot(_.isInstanceOf[Text])
 
     if (leftChildren.size != rightChildren.size) {
-      XmlDiffers("child count", leftChildren.size, rightChildren.size)
+      XmlDiffers("child count", leftChildren.size, rightChildren.size, path)
     } else {
       leftChildren.zip(rightChildren).foldLeft[XmlDiff](XmlEqual) {
         case (status, (leftChild, rightChild)) =>
@@ -98,9 +102,13 @@ object XmlCompare {
             // already failed
             status
           } else {
-            compare(leftChild, rightChild, options)
+            compareNodes(leftChild, rightChild, options, extendPath(path, left))
           }
       }
     }
+  }
+
+  private def extendPath(path: Seq[String], node: Node): Seq[String] = {
+    path :+ node.nameToString(StringBuilder.newBuilder).toString
   }
 }

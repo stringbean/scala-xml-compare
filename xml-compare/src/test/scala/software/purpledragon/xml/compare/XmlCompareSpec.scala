@@ -14,7 +14,7 @@ class XmlCompareSpec extends FlatSpec with Matchers {
   }
 
   it should "not-match different label" in {
-    XmlCompare.compare(<test/>, <foo/>) shouldBe XmlDiffers("different label", "test", "foo")
+    XmlCompare.compare(<test/>, <foo/>) shouldBe XmlDiffers("different label", "test", "foo", Seq("test"))
   }
 
   it should "match same namespaces" in {
@@ -31,7 +31,7 @@ class XmlCompareSpec extends FlatSpec with Matchers {
 
   it should "not-match different namespace url" in {
     XmlCompare.compare(<t:test xmlns:t="http://example.com"/>, <t:test xmlns:t="http://foo.com"/>) shouldBe
-      XmlDiffers("different namespace", "http://example.com", "http://foo.com")
+      XmlDiffers("different namespace", "http://example.com", "http://foo.com", Seq("t:test"))
   }
 
   it should "match with same single child" in {
@@ -42,7 +42,8 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     XmlCompare.compare(<test><test2/></test>, <test><foo/></test>) shouldBe XmlDiffers(
       "different label",
       "test2",
-      "foo")
+      "foo",
+      Seq("test", "test2"))
   }
 
   it should "match with same text contents" in {
@@ -50,7 +51,11 @@ class XmlCompareSpec extends FlatSpec with Matchers {
   }
 
   it should "not-match different text contents" in {
-    XmlCompare.compare(<test>contents</test>, <test/>) shouldBe XmlDiffers("different text", "contents", "")
+    XmlCompare.compare(<test>contents</test>, <test/>) shouldBe XmlDiffers(
+      "different text",
+      "contents",
+      "",
+      Seq("test"))
   }
 
   it should "match with text content differing only by whitespace" in {
@@ -62,24 +67,28 @@ class XmlCompareSpec extends FlatSpec with Matchers {
   }
 
   "compare without IgnoreNamespacePrefix" should "not-match different namespace prefix" in {
-    XmlCompare.compare(
-        <t:test xmlns:t="http://example.com"/>,
-        <e:test xmlns:e="http://example.com"/>,
-        Set.empty) shouldBe XmlDiffers("different namespace prefix", "t", "e")
+    XmlCompare.compare(<t:test xmlns:t="http://example.com"/>, <e:test xmlns:e="http://example.com"/>, Set.empty) shouldBe XmlDiffers(
+      "different namespace prefix",
+      "t",
+      "e",
+      Seq("t:test"))
   }
 
   it should "match same namespaces" in {
-    XmlCompare.compare(
-        <t:test xmlns:t="http://example.com"/>,
-        <t:test xmlns:t="http://example.com"/>,
-        Set.empty) shouldBe XmlEqual
+    XmlCompare.compare(<t:test xmlns:t="http://example.com"/>, <t:test xmlns:t="http://example.com"/>, Set.empty) shouldBe XmlEqual
   }
 
   "compare with IgnoreNamespace" should "match different namespace prefix" in {
-    XmlCompare.compare(<t:test xmlns:t="http://example.com"/>, <e:test xmlns:e="http://example.com"/>, Set(IgnoreNamespace)) shouldBe XmlEqual
+    XmlCompare.compare(
+      <t:test xmlns:t="http://example.com"/>,
+      <e:test xmlns:e="http://example.com"/>,
+      Set(IgnoreNamespace)) shouldBe XmlEqual
   }
 
   it should "match different namespace" in {
-    XmlCompare.compare(<t:test xmlns:t="http://example.com"/>, <t:test xmlns:e="http://example.org"/>, Set(IgnoreNamespace)) shouldBe XmlEqual
+    XmlCompare.compare(
+      <t:test xmlns:t="http://example.com"/>,
+      <t:test xmlns:e="http://example.org"/>,
+      Set(IgnoreNamespace)) shouldBe XmlEqual
   }
 }

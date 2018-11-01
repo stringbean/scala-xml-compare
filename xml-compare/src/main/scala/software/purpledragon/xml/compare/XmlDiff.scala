@@ -27,6 +27,9 @@ sealed trait XmlDiff {
 
   /** Descriptive message containing the differences (if any). */
   def message: String
+
+  /** Path of the first difference (if any). */
+  def failurePath: Seq[String]
 }
 
 /**
@@ -34,8 +37,9 @@ sealed trait XmlDiff {
  */
 object XmlEqual extends XmlDiff {
   override val isEqual = true
-  override def toString: String = "XmlEqual"
+  override val toString: String = "XmlEqual"
   override val message = ""
+  override val failurePath: Seq[String] = Nil
 }
 
 /**
@@ -44,8 +48,9 @@ object XmlEqual extends XmlDiff {
  * @param reason descriptive reason for the comparison failing.
  * @param left the left-hand value in the failed comparison.
  * @param right the right-hand value in the failed comparison.
+ * @param failurePath path to the failed node.
  */
-case class XmlDiffers(reason: String, left: Any, right: Any) extends XmlDiff {
+case class XmlDiffers(reason: String, left: Any, right: Any, failurePath: Seq[String]) extends XmlDiff {
   override val isEqual = false
   override val message = s"$reason - $left != $right"
 }
