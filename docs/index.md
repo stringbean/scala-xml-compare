@@ -6,7 +6,7 @@ scala-xml-compare is a small Scala library for comparing XML documents.
 
 @@@vars
 ```scala
-libraryDependencies += "purpledragon.software" %% "scala-xml" % "$project.version$"
+libraryDependencies += "purpledragon.software.xml" %% "xml-compare" % "$project.version$"
 ```
 @@@
 
@@ -16,10 +16,10 @@ Companion libraries are also provided for comparing XML from [Scalatest](http://
 @@@vars
 ```scala
 // scalatest
-libraryDependencies += "purpledragon.software" %% "scala-scalatest" % "$project.version$" % Test
+libraryDependencies += "purpledragon.software.xml" %% "xml-scalatest" % "$project.version$" % Test
 
 // specs2
-libraryDependencies += "purpledragon.software" %% "scala-specs2" % "$project.version$" % Test
+libraryDependencies += "purpledragon.software.xml" %% "xml-specs2" % "$project.version$" % Test
 ```
 @@@
 
