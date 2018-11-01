@@ -4,7 +4,7 @@ import com.typesafe.sbt.SbtGit.GitKeys._
 organization := "software.purpledragon.xml"
 version := "0.0.3-SNAPSHOT"
 
-scalaVersion := "2.12.6"
+scalaVersion := "2.12.7"
 crossScalaVersions := Seq(scalaVersion.value, "2.11.12")
 
 // dependencies common for all sub-projects
