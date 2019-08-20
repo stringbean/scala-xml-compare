@@ -8,8 +8,6 @@ object SettingsPlugin extends AutoPlugin {
   override def requires: Plugins = JvmPlugin
 
   private val javaVersion = "1.8"
-  private val scalatestStable = "3.0.5"
-  private val scalatestSnapshot = "3.0.6-SNAP4"
 
   object autoImport {
     val scalatestVersion = settingKey[String]("Version of scalatest to use")
@@ -22,13 +20,8 @@ object SettingsPlugin extends AutoPlugin {
     version := (version in LocalRootProject).value,
     scalaVersion := (scalaVersion in LocalRootProject).value,
     crossScalaVersions := (crossScalaVersions in LocalRootProject).value,
-    javacOptions ++= Seq("-source", javaVersion,
-      "-target", javaVersion,
-      "-Xlint"),
-    scalacOptions ++= Seq(s"-target:jvm-$javaVersion",
-      "-deprecation",
-      "-feature",
-      "-unchecked"),
+    javacOptions ++= Seq("-source", javaVersion, "-target", javaVersion, "-Xlint"),
+    scalacOptions ++= Seq(s"-target:jvm-$javaVersion", "-deprecation", "-feature", "-unchecked"),
     libraryDependencies ++= (libraryDependencies in LocalRootProject).value,
     scalafmtVersion := "1.5.1",
     autoAPIMappings := true,
@@ -40,12 +33,10 @@ object SettingsPlugin extends AutoPlugin {
     organizationName := "Michael Stringer",
     organizationHomepage := Some(url("https://purpledragon.software")),
     homepage := Some(url("https://stringbean.github.io/scala-xml-compare")),
-    scmInfo := Some(ScmInfo(url("https://github.com/stringbean/scala-xml-compare"), "https://github.com/stringbean/scala-xml-compare.git")),
-    scalatestVersion := {
-      scalaVersion.value match {
-        case "2.13.0-M5" => scalatestSnapshot
-        case _ => scalatestStable
-      }
-    }
+    scmInfo := Some(
+      ScmInfo(
+        url("https://github.com/stringbean/scala-xml-compare"),
+        "https://github.com/stringbean/scala-xml-compare.git")),
+    scalatestVersion := "3.0.8"
   )
 }

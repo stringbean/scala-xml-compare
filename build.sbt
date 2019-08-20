@@ -2,14 +2,14 @@ import PgpKeys.{publishLocalSigned, publishSigned}
 import com.typesafe.sbt.SbtGit.GitKeys._
 
 organization := "software.purpledragon.xml"
-version := "1.0.0"
+version := "1.0.1-SNAPSHOT"
 
-scalaVersion := "2.12.7"
-crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.13.0-M5")
+scalaVersion := "2.12.8"
+crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.13.0")
 
 // dependencies common for all sub-projects
 libraryDependencies ++= Seq(
-  "org.scala-lang.modules"  %% "scala-xml"  % "1.1.1"
+  "org.scala-lang.modules"  %% "scala-xml"  % "1.2.0"
 )
 
 lazy val xmlCompare = Project("xml-compare", file("xml-compare"))
