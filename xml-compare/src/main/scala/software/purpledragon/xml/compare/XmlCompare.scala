@@ -19,7 +19,7 @@ package software.purpledragon.xml.compare
 import software.purpledragon.xml.compare.options.DiffOption._
 import software.purpledragon.xml.compare.options.DiffOptions
 
-import scala.xml.{Node, Text}
+import scala.xml.{Atom, Node}
 
 /**
  * Utility for comparing XML documents.
@@ -79,8 +79,9 @@ object XmlCompare {
   }
 
   private def compareText(left: Node, right: Node, options: DiffOptions, path: Seq[String]): XmlDiff = {
-    val leftText = left.child.collect({ case t: Text => t }).map(_.text.trim).mkString
-    val rightText = right.child.collect({ case t: Text => t }).map(_.text.trim).mkString
+    def extractText(node: Node): String = node.child.collect({ case a: Atom[_] => a }).map(_.text.trim).mkString
+    val leftText = extractText(left)
+    val rightText = extractText(right)
 
     if (leftText != rightText) {
       XmlDiffers("different text", leftText, rightText, extendPath(path, left))
@@ -90,8 +91,8 @@ object XmlCompare {
   }
 
   private def compareChildren(left: Node, right: Node, options: DiffOptions, path: Seq[String]): XmlDiff = {
-    val leftChildren = left.child.filterNot(_.isInstanceOf[Text])
-    val rightChildren = right.child.filterNot(_.isInstanceOf[Text])
+    val leftChildren = left.child.filterNot(c => c.isInstanceOf[Atom[_]])
+    val rightChildren = right.child.filterNot(c => c.isInstanceOf[Atom[_]])
 
     if (leftChildren.size != rightChildren.size) {
       XmlDiffers("different child count", leftChildren.size, rightChildren.size, extendPath(path, left))

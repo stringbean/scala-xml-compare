@@ -62,6 +62,11 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     XmlCompare.compare(<test>contents  </test>, <test>contents</test>) shouldBe XmlEqual
   }
 
+  it should "match with text content from a variable" in {
+    val content = "contents"
+    XmlCompare.compare(<test>contents</test>, <test>{content}</test>) shouldBe XmlEqual
+  }
+
   it should "match with child & text content in different order" in {
     XmlCompare.compare(<test><test2/>contents</test>, <test>contents<test2/></test>) shouldBe XmlEqual
   }
