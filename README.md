@@ -3,7 +3,7 @@
 [![Test Coverage](https://img.shields.io/codecov/c/github/stringbean/scala-xml-compare/master.svg)](https://codecov.io/gh/stringbean/scala-xml-compare)
 [![Maven Central - Scala 2.11](https://img.shields.io/maven-central/v/software.purpledragon.xml/xml-compare_2.11.svg?label=scala%202.11)](https://search.maven.org/search?q=g:software.purpledragon.xml%20a:xml-compare_2.11)
 [![Maven Central - Scala 2.12](https://img.shields.io/maven-central/v/software.purpledragon.xml/xml-compare_2.12.svg?label=scala%202.12)](https://search.maven.org/search?q=g:software.purpledragon.xml%20a:xml-compare_2.12)
-[![Maven Central - Scala 2.13-M5](https://img.shields.io/maven-central/v/software.purpledragon.xml/xml-compare_2.13.0-M5.svg?label=scala%202.13-M5)](https://search.maven.org/search?q=g:software.purpledragon.xml%20a:xml-compare_2.13.0-M5)
+[![Maven Central - Scala 2.13](https://img.shields.io/maven-central/v/software.purpledragon.xml/xml-compare_2.13.svg?label=scala%202.13)](https://search.maven.org/search?q=g:software.purpledragon.xml%20a:xml-compare_2.13)
 
 # XML Comparison Utils for Scala
 
