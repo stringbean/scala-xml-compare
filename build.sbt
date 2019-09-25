@@ -3,7 +3,6 @@ val javaVersion = "1.8"
 inThisBuild(
   Seq(
     organization := "software.purpledragon.xml",
-    version := "1.0.3-SNAPSHOT",
     scalaVersion := "2.13.1",
     crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.12.10"),
     licenses += ("Apache-2.0", url("https://opensource.org/licenses/Apache-2.0")),
@@ -47,6 +46,7 @@ lazy val xmlSpecs2 = Project("xml-specs2", file("xml-specs2"))
     previewAuto := {}
   )
 
+import ReleaseTransformations._
 lazy val root = Project("scala-xml-compare", file("."))
   .aggregate(
     xmlCompare,
@@ -67,6 +67,23 @@ lazy val root = Project("scala-xml-compare", file("."))
     scalacOptions in Compile in doc ++= Seq(
       "-doc-root-content",
       baseDirectory.value + "/root-scaladoc.txt"
+    ),
+    // sbt-release settings
+    releaseCrossBuild := true,
+    releasePublishArtifactsAction := PgpKeys.publishSigned.value,
+    releaseProcess := Seq[ReleaseStep](
+      checkSnapshotDependencies,
+      inquireVersions,
+      runClean,
+      runTest,
+      setReleaseVersion,
+      commitReleaseVersion,
+      tagRelease,
+      publishArtifacts,
+      releaseStepTask(ghpagesPushSite),
+      setNextVersion,
+      commitNextVersion,
+      pushChanges
     )
   )
   .enablePlugins(ScalaUnidocPlugin, GhpagesPlugin, ParadoxSitePlugin)
