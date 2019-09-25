@@ -1,5 +1,7 @@
 val javaVersion = "1.8"
 
+import sbtrelease.ReleasePlugin.autoImport._
+
 inThisBuild(
   Seq(
     organization := "software.purpledragon.xml",
@@ -26,25 +28,22 @@ inThisBuild(
     ),
   ))
 
+lazy val commonSettings = Seq(
+  releasePublishArtifactsAction := PgpKeys.publishLocalSigned.value,
+  previewSite := {},
+  previewAuto := {},
+)
+
 lazy val xmlCompare = Project("xml-compare", file("xml-compare"))
-  .settings(
-    previewSite := {},
-    previewAuto := {}
-  )
+  .settings(commonSettings)
 
 lazy val xmlScalatest = Project("xml-scalatest", file("xml-scalatest"))
   .dependsOn(xmlCompare)
-  .settings(
-    previewSite := {},
-    previewAuto := {}
-  )
+  .settings(commonSettings)
 
 lazy val xmlSpecs2 = Project("xml-specs2", file("xml-specs2"))
   .dependsOn(xmlCompare)
-  .settings(
-    previewSite := {},
-    previewAuto := {}
-  )
+  .settings(commonSettings)
 
 import ReleaseTransformations._
 lazy val root = Project("scala-xml-compare", file("."))
@@ -70,7 +69,6 @@ lazy val root = Project("scala-xml-compare", file("."))
     ),
     // sbt-release settings
     releaseCrossBuild := true,
-    releasePublishArtifactsAction := PgpKeys.publishSigned.value,
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
