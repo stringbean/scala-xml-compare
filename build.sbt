@@ -16,7 +16,7 @@ inThisBuild(
     scmInfo := Some(
       ScmInfo(
         url("https://github.com/stringbean/scala-xml-compare"),
-        "https://github.com/stringbean/scala-xml-compare.git")),
+        "scm:git:git@github.com:stringbean/scala-xml-compare.git")),
     autoAPIMappings := true,
     javacOptions ++= Seq("-source", javaVersion, "-target", javaVersion, "-Xlint"),
     scalacOptions ++= Seq(s"-target:jvm-$javaVersion", "-deprecation", "-feature", "-unchecked"),
