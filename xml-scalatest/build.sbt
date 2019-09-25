@@ -1,5 +1,5 @@
 name := "xml-scalatest"
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest"  % scalatestVersion.value % Provided
+  "org.scalatest" %% "scalatest"  % "3.0.8" % Provided
 )
