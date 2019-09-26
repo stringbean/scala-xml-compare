@@ -15,8 +15,13 @@ before_cache:
   - find $HOME/.sbt -name "*.lock" -delete
 
 # build with scoverage report and upload to codecov
-script:
-  - sbt coverage test coverageReport coverageAggregate
+
+jobs:
+  include:
+    - stage: Test (all Scala versions)
+      script: sbt +test
+    - stage: Coverage (2.12 only)
+      script: sbt ++2.12.10 coverage test coverageReport coverageAggregate
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
