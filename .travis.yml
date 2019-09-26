@@ -18,10 +18,10 @@ before_cache:
 
 jobs:
   include:
-    - stage: Test (all Scala versions)
+    # run tests against all Scala versions & JDKs
+    - stage: Test
       script: sbt +test
-    - stage: Coverage (2.12 only)
-      script: sbt ++2.12.10 coverage test coverageReport coverageAggregate
+    # coverage only runs on 2.12 openjdk8
+    - stage: Coverage
+      script: sbt ++2.12.10 coverage test coverageReport coverageAggregate && bash <(curl -s https://codecov.io/bash)
 
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
