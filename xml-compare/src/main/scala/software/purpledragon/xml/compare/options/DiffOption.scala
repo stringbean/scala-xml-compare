@@ -51,7 +51,7 @@ object DiffOption extends Enumeration {
   val IgnoreNamespace: DiffOption.Value = Value
 
   /**
-  * Require element attributes have the same ordering.
+   * Require element attributes have the same ordering.
    *
    * Enabling this make this:
    * {{{
