@@ -80,25 +80,24 @@ object XmlCompare {
   }
 
   private def compareAttributes(left: Node, right: Node, options: DiffOptions, path: Seq[String]): XmlDiff = {
-    def extractAttributes(node: Node): Map[String, String] = {
-      node.attributes.foldLeft(Map.empty[String, String]) { (acc, attrib) =>
-        acc + (attrib.key -> attrib.value.text)
+    def extractAttributes(node: Node): (Seq[String], Map[String, String]) = {
+      node.attributes.foldLeft(Seq.empty[String], Map.empty[String, String]) {
+        case ((keys, attribs), attrib) =>
+          (keys :+ attrib.key, attribs + (attrib.key -> attrib.value.text))
       }
     }
 
-    val leftAttributes: Map[String, String] = extractAttributes(left)
-    val rightAttributes = extractAttributes(right)
+    val (leftKeys, leftMap) = extractAttributes(left)
+    val (rightKeys, rightMap) = extractAttributes(right)
 
-    if (leftAttributes.keySet != rightAttributes.keySet) {
-      XmlDiffers("different attribute names", leftAttributes.keySet, rightAttributes.keySet, extendPath(path, left))
+    if (leftKeys.sorted != rightKeys.sorted) {
+      XmlDiffers("different attribute names", leftKeys.sorted, rightKeys.sorted, extendPath(path, left))
+    } else if (options.contains(StrictAttributeOrdering) && leftKeys != rightKeys) {
+      XmlDiffers("different attribute ordering", leftKeys, rightKeys, extendPath(path, left))
     } else {
-      leftAttributes.keySet.toSeq.sorted collectFirst {
-        case name if leftAttributes(name) != rightAttributes(name) =>
-          XmlDiffers(
-            s"different value for attribute '$name'",
-            leftAttributes(name),
-            rightAttributes(name),
-            extendPath(path, left))
+      leftKeys.sorted collectFirst {
+        case name if leftMap(name) != rightMap(name) =>
+          XmlDiffers(s"different value for attribute '$name'", leftMap(name), rightMap(name), extendPath(path, left))
       } getOrElse XmlEqual
     }
   }

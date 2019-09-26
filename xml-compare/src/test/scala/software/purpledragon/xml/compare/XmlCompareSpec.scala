@@ -91,8 +91,8 @@ class XmlCompareSpec extends FlatSpec with Matchers {
   it should "not-match with different attribute names" in {
     XmlCompare.compare(<test value="a" />, <test cost="a" />) shouldBe XmlDiffers(
       "different attribute names",
-      Set("value"),
-      Set("cost"),
+      Seq("value"),
+      Seq("cost"),
       Seq("test")
     )
   }
@@ -100,8 +100,8 @@ class XmlCompareSpec extends FlatSpec with Matchers {
   it should "not-match with different attribute count" in {
     XmlCompare.compare(<test first="a" second="b" />, <test first="a" />) shouldBe XmlDiffers(
       "different attribute names",
-      Set("first", "second"),
-      Set("first"),
+      Seq("first", "second"),
+      Seq("first"),
       Seq("test")
     )
   }
@@ -149,5 +149,18 @@ class XmlCompareSpec extends FlatSpec with Matchers {
       <t:test xmlns:t="http://example.com"/>,
       <t:test xmlns:e="http://example.org"/>,
       Set(IgnoreNamespace)) shouldBe XmlEqual
+  }
+
+  "compare with StrictAttributeOrder" should "match with same attributes" in {
+    XmlCompare.compare(<test first="a" second="b" />, <test first="a" second="b" />, Set(StrictAttributeOrdering)) shouldBe XmlEqual
+  }
+
+  it should "not-match with attributes in different order" in {
+    XmlCompare.compare(<test first="a" second="b" />, <test second="b" first="a" />, Set(StrictAttributeOrdering)) shouldBe XmlDiffers(
+      "different attribute ordering",
+      Seq("first", "second"),
+      Seq("second", "first"),
+      Seq("test")
+    )
   }
 }
