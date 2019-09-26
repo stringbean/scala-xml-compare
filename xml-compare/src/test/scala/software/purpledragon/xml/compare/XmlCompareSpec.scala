@@ -80,6 +80,41 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     )
   }
 
+  it should "match with same attributes" in {
+    XmlCompare.compare(<test first="a" second="b"/>, <test first="a" second="b" />) shouldBe XmlEqual
+  }
+
+  it should "match with same attributes in different order" in {
+    XmlCompare.compare(<test first="a" second="b"/>, <test second="b" first="a" />) shouldBe XmlEqual
+  }
+
+  it should "not-match with different attribute names" in {
+    XmlCompare.compare(<test value="a" />, <test cost="a" />) shouldBe XmlDiffers(
+      "different attribute names",
+      Set("value"),
+      Set("cost"),
+      Seq("test")
+    )
+  }
+
+  it should "not-match with different attribute count" in {
+    XmlCompare.compare(<test first="a" second="b" />, <test first="a" />) shouldBe XmlDiffers(
+      "different attribute names",
+      Set("first", "second"),
+      Set("first"),
+      Seq("test")
+    )
+  }
+
+  it should "not-match with different attribute value" in {
+    XmlCompare.compare(<test value="a" />, <test value="b" />) shouldBe XmlDiffers(
+      "different value for attribute 'value'",
+      "a",
+      "b",
+      Seq("test")
+    )
+  }
+
   it should "not-match with multiple errors" in {
     XmlCompare.compare(
       <test><child-1>text-1</child-1><child-2>text-2</child-2></test>,

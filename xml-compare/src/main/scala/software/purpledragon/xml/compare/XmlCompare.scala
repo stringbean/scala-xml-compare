@@ -51,6 +51,7 @@ object XmlCompare {
   private def compareNodes(left: Node, right: Node, options: DiffOptions, path: Seq[String]): XmlDiff = {
     val checks: Seq[Check] = Seq(
       compareNamespace,
+      compareAttributes,
       compareText,
       compareChildren
     )
@@ -75,6 +76,30 @@ object XmlCompare {
       XmlDiffers("different namespace prefix", left.prefix, right.prefix, extendPath(path, left))
     } else {
       XmlEqual
+    }
+  }
+
+  private def compareAttributes(left: Node, right: Node, options: DiffOptions, path: Seq[String]): XmlDiff = {
+    def extractAttributes(node: Node): Map[String, String] = {
+      node.attributes.foldLeft(Map.empty[String, String]) { (acc, attrib) =>
+        acc + (attrib.key -> attrib.value.text)
+      }
+    }
+
+    val leftAttributes: Map[String, String] = extractAttributes(left)
+    val rightAttributes = extractAttributes(right)
+
+    if (leftAttributes.keySet != rightAttributes.keySet) {
+      XmlDiffers("different attribute names", leftAttributes.keySet, rightAttributes.keySet, extendPath(path, left))
+    } else {
+      leftAttributes.keySet.toSeq.sorted collectFirst {
+        case name if leftAttributes(name) != rightAttributes(name) =>
+          XmlDiffers(
+            s"different value for attribute '$name'",
+            leftAttributes(name),
+            rightAttributes(name),
+            extendPath(path, left))
+      } getOrElse XmlEqual
     }
   }
 
