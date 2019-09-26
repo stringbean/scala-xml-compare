@@ -1,3 +1,19 @@
+/*
+ * Copyright 2017 Michael Stringer
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package software.purpledragon.xml.compare
 
 import org.scalatest.{FlatSpec, Matchers}
@@ -80,6 +96,41 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     )
   }
 
+  it should "match with same attributes" in {
+    XmlCompare.compare(<test first="a" second="b"/>, <test first="a" second="b" />) shouldBe XmlEqual
+  }
+
+  it should "match with same attributes in different order" in {
+    XmlCompare.compare(<test first="a" second="b"/>, <test second="b" first="a" />) shouldBe XmlEqual
+  }
+
+  it should "not-match with different attribute names" in {
+    XmlCompare.compare(<test value="a" />, <test cost="a" />) shouldBe XmlDiffers(
+      "different attribute names",
+      Seq("value"),
+      Seq("cost"),
+      Seq("test")
+    )
+  }
+
+  it should "not-match with different attribute count" in {
+    XmlCompare.compare(<test first="a" second="b" />, <test first="a" />) shouldBe XmlDiffers(
+      "different attribute names",
+      Seq("first", "second"),
+      Seq("first"),
+      Seq("test")
+    )
+  }
+
+  it should "not-match with different attribute value" in {
+    XmlCompare.compare(<test value="a" />, <test value="b" />) shouldBe XmlDiffers(
+      "different value for attribute 'value'",
+      "a",
+      "b",
+      Seq("test")
+    )
+  }
+
   it should "not-match with multiple errors" in {
     XmlCompare.compare(
       <test><child-1>text-1</child-1><child-2>text-2</child-2></test>,
@@ -114,5 +165,18 @@ class XmlCompareSpec extends FlatSpec with Matchers {
       <t:test xmlns:t="http://example.com"/>,
       <t:test xmlns:e="http://example.org"/>,
       Set(IgnoreNamespace)) shouldBe XmlEqual
+  }
+
+  "compare with StrictAttributeOrder" should "match with same attributes" in {
+    XmlCompare.compare(<test first="a" second="b" />, <test first="a" second="b" />, Set(StrictAttributeOrdering)) shouldBe XmlEqual
+  }
+
+  it should "not-match with attributes in different order" in {
+    XmlCompare.compare(<test first="a" second="b" />, <test second="b" first="a" />, Set(StrictAttributeOrdering)) shouldBe XmlDiffers(
+      "different attribute ordering",
+      Seq("first", "second"),
+      Seq("second", "first"),
+      Seq("test")
+    )
   }
 }

@@ -60,9 +60,10 @@ lazy val root = Project("scala-xml-compare", file("."))
     // site/paradox
     siteSubdirName in ScalaUnidoc := "api",
     addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), siteSubdirName in ScalaUnidoc),
-    paradoxProperties in Paradox ++= Map(
-      "scaladoc.software.purpledragon.xml.base_url" -> ".../api"
+    paradoxProperties in Compile ++= Map(
+      "scaladoc.base_url" -> ".../api"
     ),
+    paradoxNavigationDepth := 3,
     scalacOptions in Compile in doc ++= Seq(
       "-doc-root-content",
       baseDirectory.value + "/root-scaladoc.txt"
