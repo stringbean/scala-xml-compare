@@ -17,9 +17,9 @@
 package software.purpledragon.xml.compare
 
 import software.purpledragon.xml.compare.options.DiffOption._
-import software.purpledragon.xml.compare.options.DiffOptions
+import software.purpledragon.xml.compare.options.{DiffOption, DiffOptions}
 
-import scala.xml.{Atom, Node}
+import scala.xml._
 
 /**
  * Utility for comparing XML documents.
@@ -80,13 +80,6 @@ object XmlCompare {
   }
 
   private def compareAttributes(left: Node, right: Node, options: DiffOptions, path: Seq[String]): XmlDiff = {
-    def extractAttributes(node: Node): (Seq[String], Map[String, String]) = {
-      node.attributes.foldLeft(Seq.empty[String], Map.empty[String, String]) {
-        case ((keys, attribs), attrib) =>
-          (keys :+ attrib.key, attribs + (attrib.key -> attrib.value.text))
-      }
-    }
-
     val (leftKeys, leftMap) = extractAttributes(left)
     val (rightKeys, rightMap) = extractAttributes(right)
 
@@ -115,8 +108,8 @@ object XmlCompare {
   }
 
   private def compareChildren(left: Node, right: Node, options: DiffOptions, path: Seq[String]): XmlDiff = {
-    val leftChildren = left.child.filterNot(c => c.isInstanceOf[Atom[_]])
-    val rightChildren = right.child.filterNot(c => c.isInstanceOf[Atom[_]])
+    val leftChildren = normalise(left.child, options)
+    val rightChildren = normalise(right.child, options)
 
     if (leftChildren.size != rightChildren.size) {
       XmlDiffers("different child count", leftChildren.size, rightChildren.size, extendPath(path, left))
@@ -135,5 +128,86 @@ object XmlCompare {
 
   private def extendPath(path: Seq[String], node: Node): Seq[String] = {
     path :+ node.nameToString(new StringBuilder()).toString
+  }
+
+  private def extractAttributes(node: Node): (Seq[String], Map[String, String]) = {
+    node.attributes.foldLeft(Seq.empty[String], Map.empty[String, String]) {
+      case ((keys, attribs), attrib) =>
+        (keys :+ attrib.key, attribs + (attrib.key -> attrib.value.text))
+    }
+  }
+
+  private implicit object NodeOrdering extends Ordering[Node] {
+    private def typeToOrdering(node: Node): Int = {
+      node match {
+        case _: Elem => 1
+        case _: Text => 2
+        case _: PCData => 3
+        case _: Comment => 4
+      }
+    }
+
+    override def compare(x: Node, y: Node): Int = {
+      (x, y) match {
+        case (xe: Elem, ye: Elem) =>
+          val labelOrder = xe.label compareTo ye.label
+
+          if (labelOrder != 0) {
+            labelOrder
+          } else {
+            val (xAttributeNames, xAttributes) = extractAttributes(xe)
+            val (yAttributeNames, yAttributes) = extractAttributes(ye)
+
+            // order by attribute count
+            val attributeSizeOrder = xAttributeNames.size compareTo yAttributeNames.size
+
+            if (attributeSizeOrder != 0) {
+              attributeSizeOrder
+            } else {
+              // compare attribute names
+              val attributeNamesOrder = xAttributeNames.sorted zip yAttributeNames.sorted map {
+                case (x, y) => x compareTo y
+              }
+
+              // take first difference
+              attributeNamesOrder.find(_ != 0) match {
+                case Some(v) =>
+                  v
+                case None =>
+                  // if not compare values
+                  val attributeValuesOrder = xAttributeNames map { name =>
+                    xAttributes(name) compareTo yAttributes(name)
+                  }
+
+                  attributeValuesOrder.find(_ != 0).getOrElse(0)
+              }
+            }
+          }
+
+        case (xe: Text, ye: Text) =>
+          xe.text compareTo ye.text
+
+        case (xe: PCData, ye: PCData) =>
+          xe.data compareTo ye.data
+
+        case (xe: Comment, ye: Comment) =>
+          xe.commentText compareTo ye.commentText
+
+        case _ =>
+          // different types - order by type
+          typeToOrdering(x) compareTo typeToOrdering(y)
+      }
+    }
+  }
+
+  private def normalise(nodes: Seq[Node], options: DiffOptions): Seq[Node] = {
+    val sort = options.contains(DiffOption.IgnoreChildOrder)
+    val filtered = nodes.filterNot(n => n.isInstanceOf[Atom[_]])
+
+    if (sort) {
+      filtered.sorted
+    } else {
+      filtered
+    }
   }
 }

@@ -63,4 +63,6 @@ object DiffOption extends Enumeration {
    * }}}
    */
   val StrictAttributeOrdering: DiffOption.Value = Value
+
+  val IgnoreChildOrder: DiffOption.Value = Value
 }
