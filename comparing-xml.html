@@ -31,7 +31,7 @@
 <span class="home-icon">⌂</span>scala-xml-compare
 </a>
 <div class="version-number">
-1.1.0
+1.2.0
 </div>
 <div class="scaladoc">
 <a href="api/index.html"><span class="home-icon">§</span>Scaladocs</a>
@@ -72,7 +72,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <span class="home-icon">⌂</span>scala-xml-compare
 </a>
 <div class="version-number">
-1.1.0
+1.2.0
 </div>
 <div class="scaladoc">
 <a href="api/index.html"><span class="home-icon">§</span>Scaladocs</a>
@@ -181,8 +181,38 @@ XmlCompare.compare(
   Seq(&quot;test&quot;)
 )
 </code></pre>
+<h3><a href="#ignorechildorder" name="ignorechildorder" class="anchor"><span class="anchor-link"></span></a>IgnoreChildOrder</h3>
+<p>If enabled the ordering of child elements will be ignored. This is handled by re-ordering child nodes using an arbitrary sorting algorithm before comparing them.</p>
+<p><em>Note: the first difference returned may be different if this option is enabled.</em> </p>
+<h4><a href="#example-1" name="example-1" class="anchor"><span class="anchor-link"></span></a>Example 1</h4>
+<p>This:</p>
+<pre class="prettyprint"><code class="language-xml">&lt;example&gt;
+  &lt;child-1/&gt;
+  &lt;child-2/&gt;
+&lt;/example&gt;
+</code></pre>
+<p>would be considered equal to:</p>
+<pre class="prettyprint"><code class="language-xml">&lt;example&gt;
+  &lt;child-2/&gt;
+  &lt;child-1/&gt;
+&lt;/example&gt;
+</code></pre>
+<h4><a href="#example-2" name="example-2" class="anchor"><span class="anchor-link"></span></a>Example 2</h4>
+<p>This:</p>
+<pre class="prettyprint"><code class="language-xml">&lt;example&gt;
+  &lt;child-1 attribute1=&quot;value-1&quot; attribute2=&quot;value-2&quot;/&gt;
+  &lt;child-2 attribute=&quot;something&quot;/&gt;
+&lt;/example&gt;
+</code></pre>
+<p>would be considered equal to:</p>
+<pre class="prettyprint"><code class="language-xml">&lt;example&gt;
+  &lt;child-2 attribute=&quot;something&quot;/&gt;
+  &lt;child-1 attribute2=&quot;value-2&quot; attribute1=&quot;value-1&quot; /&gt;
+&lt;/example&gt;
+</code></pre>
+<p><em>(The ordering of nodes and attributes are both ignored)</em> </p>
 <div class="source-github">
-The source code for this page can be found <a href="https://github.com/stringbean/scala-xml-compare/tree/v1.1.0/src/main/paradox/comparing-xml.md">here</a>.
+The source code for this page can be found <a href="https://github.com/stringbean/scala-xml-compare/tree/v1.2.0/src/main/paradox/comparing-xml.md">here</a>.
 </div>
 
 <div class="nav-next">
@@ -207,6 +237,7 @@ The source code for this page can be found <a href="https://github.com/stringbea
       <li><a href="comparing-xml.html#ignorenamespaceprefix" class="header">IgnoreNamespacePrefix</a></li>
       <li><a href="comparing-xml.html#ignorenamespace" class="header">IgnoreNamespace</a></li>
       <li><a href="comparing-xml.html#strictattributeordering" class="header">StrictAttributeOrdering</a></li>
+      <li><a href="comparing-xml.html#ignorechildorder" class="header">IgnoreChildOrder</a></li>
     </ul></li>
   </ul></li>
 </ul>
@@ -275,7 +306,7 @@ The source code for this page can be found <a href="https://github.com/stringbea
 <script type="text/javascript" src="lib/prettify/prettify.js"></script>
 <script type="text/javascript" src="lib/prettify/lang-scala.js"></script>
 <script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
-<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.1.0', 'https://stringbean.github.io/scala-xml-compare')});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.2.0', 'https://stringbean.github.io/scala-xml-compare')});</script>
 
 
 </html>
