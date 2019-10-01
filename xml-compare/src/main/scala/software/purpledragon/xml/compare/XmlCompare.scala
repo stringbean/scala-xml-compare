@@ -16,6 +16,7 @@
 
 package software.purpledragon.xml.compare
 
+import software.purpledragon.xml.XmlUtils.extractAttributes
 import software.purpledragon.xml.compare.options.DiffOption._
 import software.purpledragon.xml.compare.options.{DiffOption, DiffOptions}
 
@@ -128,13 +129,6 @@ object XmlCompare {
 
   private def extendPath(path: Seq[String], node: Node): Seq[String] = {
     path :+ node.nameToString(new StringBuilder()).toString
-  }
-
-  private def extractAttributes(node: Node): (Seq[String], Map[String, String]) = {
-    node.attributes.foldLeft(Seq.empty[String], Map.empty[String, String]) {
-      case ((keys, attribs), attrib) =>
-        (keys :+ attrib.key, attribs + (attrib.key -> attrib.value.text))
-    }
   }
 
   private implicit object NodeOrdering extends Ordering[Node] {
