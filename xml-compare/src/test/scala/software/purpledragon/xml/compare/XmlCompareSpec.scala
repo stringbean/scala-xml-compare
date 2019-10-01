@@ -131,6 +131,13 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     )
   }
 
+  it should "not-match XML with children in different order with attributes" in {
+    XmlCompare.compare(
+      <test><child value="a"/><child value="b"/><child value="c"/></test>,
+      <test><child value="b"/><child value="a"/><child value="c"/></test>
+    ) shouldBe XmlDiffers("different value for attribute 'value'", "a", "b", Seq("test", "child"))
+  }
+
   it should "not-match with multiple errors" in {
     XmlCompare.compare(
       <test><child-1>text-1</child-1><child-2>text-2</child-2></test>,
@@ -142,41 +149,87 @@ class XmlCompareSpec extends FlatSpec with Matchers {
   }
 
   "compare without IgnoreNamespacePrefix" should "not-match different namespace prefix" in {
-    XmlCompare.compare(<t:test xmlns:t="http://example.com"/>, <e:test xmlns:e="http://example.com"/>, Set.empty) shouldBe XmlDiffers(
-      "different namespace prefix",
-      "t",
-      "e",
-      Seq("t:test"))
+    XmlCompare.compare(
+      <t:test xmlns:t="http://example.com"/>,
+      <e:test xmlns:e="http://example.com"/>,
+      Set.empty
+    ) shouldBe XmlDiffers("different namespace prefix", "t", "e", Seq("t:test"))
   }
 
   it should "match same namespaces" in {
-    XmlCompare.compare(<t:test xmlns:t="http://example.com"/>, <t:test xmlns:t="http://example.com"/>, Set.empty) shouldBe XmlEqual
+    XmlCompare.compare(
+      <t:test xmlns:t="http://example.com"/>,
+      <t:test xmlns:t="http://example.com"/>,
+      Set.empty
+    ) shouldBe XmlEqual
   }
 
   "compare with IgnoreNamespace" should "match different namespace prefix" in {
     XmlCompare.compare(
       <t:test xmlns:t="http://example.com"/>,
       <e:test xmlns:e="http://example.com"/>,
-      Set(IgnoreNamespace)) shouldBe XmlEqual
+      Set(IgnoreNamespace)
+    ) shouldBe XmlEqual
   }
 
   it should "match different namespace" in {
     XmlCompare.compare(
       <t:test xmlns:t="http://example.com"/>,
       <t:test xmlns:e="http://example.org"/>,
-      Set(IgnoreNamespace)) shouldBe XmlEqual
+      Set(IgnoreNamespace)
+    ) shouldBe XmlEqual
   }
 
   "compare with StrictAttributeOrder" should "match with same attributes" in {
-    XmlCompare.compare(<test first="a" second="b" />, <test first="a" second="b" />, Set(StrictAttributeOrdering)) shouldBe XmlEqual
+    XmlCompare.compare(
+      <test first="a" second="b" />,
+      <test first="a" second="b" />,
+      Set(StrictAttributeOrdering)
+    ) shouldBe XmlEqual
   }
 
   it should "not-match with attributes in different order" in {
-    XmlCompare.compare(<test first="a" second="b" />, <test second="b" first="a" />, Set(StrictAttributeOrdering)) shouldBe XmlDiffers(
+    XmlCompare.compare(
+      <test first="a" second="b"/>,
+      <test second="b" first="a"/>,
+      Set(StrictAttributeOrdering)
+    ) shouldBe XmlDiffers(
       "different attribute ordering",
       Seq("first", "second"),
       Seq("second", "first"),
       Seq("test")
     )
+  }
+
+  "compare with IgnoreChildOrder" should "match XML with children in same order" in {
+    XmlCompare.compare(
+      <test><child-a/><child-b/><child-a/></test>,
+      <test><child-a/><child-b/><child-a/></test>,
+      Set(IgnoreChildOrder)
+    ) shouldBe XmlEqual
+  }
+
+  it should "match XML with children in different order" in {
+    XmlCompare.compare(
+      <test><child-a/><child-b/><child-a/></test>,
+      <test><child-b/><child-a/><child-a/></test>,
+      Set(IgnoreChildOrder)
+    ) shouldBe XmlEqual
+  }
+
+  it should "match XML with children in different order with attributes" in {
+    XmlCompare.compare(
+      <test><child value="a"/><child value="b"/><child value="c"/></test>,
+      <test><child value="b"/><child value="a"/><child value="c"/></test>,
+      Set(IgnoreChildOrder)
+    ) shouldBe XmlEqual
+  }
+
+  it should "match XML with children in different order with multiple attributes" in {
+    XmlCompare.compare(
+      <test><child first="a" second="b"/><child second="1" first="2"/></test>,
+      <test><child second="1" first="2"/><child second="b" first="a"/></test>,
+      Set(IgnoreChildOrder)
+    ) shouldBe XmlEqual
   }
 }

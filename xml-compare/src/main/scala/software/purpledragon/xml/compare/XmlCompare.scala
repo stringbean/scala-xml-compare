@@ -16,16 +16,19 @@
 
 package software.purpledragon.xml.compare
 
+import software.purpledragon.xml.XmlUtils.extractAttributes
 import software.purpledragon.xml.compare.options.DiffOption._
-import software.purpledragon.xml.compare.options.DiffOptions
+import software.purpledragon.xml.compare.options.{DiffOption, DiffOptions}
 
-import scala.xml.{Atom, Node}
+import scala.xml._
 
 /**
  * Utility for comparing XML documents.
  */
 object XmlCompare {
   private type Check = (Node, Node, DiffOptions, Seq[String]) => XmlDiff
+
+  private implicit val NodeOrdering = NormalisedNodeOrdering
 
   /**
    * Default [[software.purpledragon.xml.compare.options.DiffOption.DiffOption DiffOption]]s to use during XML comparison.
@@ -80,13 +83,6 @@ object XmlCompare {
   }
 
   private def compareAttributes(left: Node, right: Node, options: DiffOptions, path: Seq[String]): XmlDiff = {
-    def extractAttributes(node: Node): (Seq[String], Map[String, String]) = {
-      node.attributes.foldLeft(Seq.empty[String], Map.empty[String, String]) {
-        case ((keys, attribs), attrib) =>
-          (keys :+ attrib.key, attribs + (attrib.key -> attrib.value.text))
-      }
-    }
-
     val (leftKeys, leftMap) = extractAttributes(left)
     val (rightKeys, rightMap) = extractAttributes(right)
 
@@ -115,8 +111,8 @@ object XmlCompare {
   }
 
   private def compareChildren(left: Node, right: Node, options: DiffOptions, path: Seq[String]): XmlDiff = {
-    val leftChildren = left.child.filterNot(c => c.isInstanceOf[Atom[_]])
-    val rightChildren = right.child.filterNot(c => c.isInstanceOf[Atom[_]])
+    val leftChildren = normalise(left.child, options)
+    val rightChildren = normalise(right.child, options)
 
     if (leftChildren.size != rightChildren.size) {
       XmlDiffers("different child count", leftChildren.size, rightChildren.size, extendPath(path, left))
@@ -135,5 +131,16 @@ object XmlCompare {
 
   private def extendPath(path: Seq[String], node: Node): Seq[String] = {
     path :+ node.nameToString(new StringBuilder()).toString
+  }
+
+  private def normalise(nodes: Seq[Node], options: DiffOptions): Seq[Node] = {
+    val sort = options.contains(DiffOption.IgnoreChildOrder)
+    val filtered = nodes.filterNot(n => n.isInstanceOf[Atom[_]])
+
+    if (sort) {
+      filtered.sorted
+    } else {
+      filtered
+    }
   }
 }

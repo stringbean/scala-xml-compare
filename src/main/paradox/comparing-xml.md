@@ -125,3 +125,50 @@ XmlDiffers(
   Seq("test")
 )
 ```
+
+### IgnoreChildOrder
+
+If enabled the ordering of child elements will be ignored. This is handled by re-ordering child nodes using an arbitrary
+sorting algorithm before comparing them.
+
+_Note: the first difference returned may be different if this option is enabled._ 
+
+#### Example 1
+
+This:
+
+```xml
+<example>
+  <child-1/>
+  <child-2/>
+</example>
+```
+
+would be considered equal to:
+```xml
+<example>
+  <child-2/>
+  <child-1/>
+</example>
+```
+
+#### Example 2
+
+This:
+
+```xml
+<example>
+  <child-1 attribute1="value-1" attribute2="value-2"/>
+  <child-2 attribute="something"/>
+</example>
+```
+
+would be considered equal to:
+```xml
+<example>
+  <child-2 attribute="something"/>
+  <child-1 attribute2="value-2" attribute1="value-1" />
+</example>
+```
+
+_(The ordering of nodes and attributes are both ignored)_ 

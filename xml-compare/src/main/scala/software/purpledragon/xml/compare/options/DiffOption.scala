@@ -63,4 +63,24 @@ object DiffOption extends Enumeration {
    * }}}
    */
   val StrictAttributeOrdering: DiffOption.Value = Value
+
+  /**
+   * Ignores the ordering of XML elements.
+   *
+   * Enabling this makes this:
+   * {{{
+   *   <example>
+   *     <child-1/>
+   *     <child-2/>
+   *   </example>
+   * }}}
+   * equal to:
+   * {{{
+   *   <example>
+   *     <child-2/>
+   *     <child-1/>
+   *   </example>
+   * }}}
+   */
+  val IgnoreChildOrder: DiffOption.Value = Value
 }
