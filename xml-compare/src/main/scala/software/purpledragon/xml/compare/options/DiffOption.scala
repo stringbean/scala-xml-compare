@@ -65,7 +65,7 @@ object DiffOption extends Enumeration {
   val StrictAttributeOrdering: DiffOption.Value = Value
 
   /**
-  * Ignores the ordering of XML elements.
+   * Ignores the ordering of XML elements.
    *
    * Enabling this makes this:
    * {{{

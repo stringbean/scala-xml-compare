@@ -28,6 +28,8 @@ import scala.xml._
 object XmlCompare {
   private type Check = (Node, Node, DiffOptions, Seq[String]) => XmlDiff
 
+  private implicit val NodeOrdering = NormalisedNodeOrdering
+
   /**
    * Default [[software.purpledragon.xml.compare.options.DiffOption.DiffOption DiffOption]]s to use during XML comparison.
    *
@@ -129,69 +131,6 @@ object XmlCompare {
 
   private def extendPath(path: Seq[String], node: Node): Seq[String] = {
     path :+ node.nameToString(new StringBuilder()).toString
-  }
-
-  private implicit object NodeOrdering extends Ordering[Node] {
-    private def typeToOrdering(node: Node): Int = {
-      node match {
-        case _: Elem => 1
-        case _: Text => 2
-        case _: PCData => 3
-        case _: Comment => 4
-      }
-    }
-
-    override def compare(x: Node, y: Node): Int = {
-      (x, y) match {
-        case (xe: Elem, ye: Elem) =>
-          val labelOrder = xe.label compareTo ye.label
-
-          if (labelOrder != 0) {
-            labelOrder
-          } else {
-            val (xAttributeNames, xAttributes) = extractAttributes(xe)
-            val (yAttributeNames, yAttributes) = extractAttributes(ye)
-
-            // order by attribute count
-            val attributeSizeOrder = xAttributeNames.size compareTo yAttributeNames.size
-
-            if (attributeSizeOrder != 0) {
-              attributeSizeOrder
-            } else {
-              // compare attribute names
-              val attributeNamesOrder = xAttributeNames.sorted zip yAttributeNames.sorted map {
-                case (x, y) => x compareTo y
-              }
-
-              // take first difference
-              attributeNamesOrder.find(_ != 0) match {
-                case Some(v) =>
-                  v
-                case None =>
-                  // if not compare values
-                  val attributeValuesOrder = xAttributeNames map { name =>
-                    xAttributes(name) compareTo yAttributes(name)
-                  }
-
-                  attributeValuesOrder.find(_ != 0).getOrElse(0)
-              }
-            }
-          }
-
-        case (xe: Text, ye: Text) =>
-          xe.text compareTo ye.text
-
-        case (xe: PCData, ye: PCData) =>
-          xe.data compareTo ye.data
-
-        case (xe: Comment, ye: Comment) =>
-          xe.commentText compareTo ye.commentText
-
-        case _ =>
-          // different types - order by type
-          typeToOrdering(x) compareTo typeToOrdering(y)
-      }
-    }
   }
 
   private def normalise(nodes: Seq[Node], options: DiffOptions): Seq[Node] = {
