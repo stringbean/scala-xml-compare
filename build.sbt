@@ -70,6 +70,7 @@ lazy val root = Project("scala-xml-compare", file("."))
     ),
     // sbt-release settings
     releaseCrossBuild := true,
+    releaseVcsSign := true,
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
