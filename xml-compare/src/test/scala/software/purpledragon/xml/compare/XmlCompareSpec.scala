@@ -18,6 +18,7 @@ package software.purpledragon.xml.compare
 
 import org.scalatest.{FlatSpec, Matchers}
 import software.purpledragon.xml.compare.options.DiffOption._
+import software.purpledragon.xml.compare.options.DiffOptions
 
 class XmlCompareSpec extends FlatSpec with Matchers {
 
@@ -152,7 +153,7 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     XmlCompare.compare(
       <t:test xmlns:t="http://example.com"/>,
       <e:test xmlns:e="http://example.com"/>,
-      Set.empty
+      DiffOptions.empty
     ) shouldBe XmlDiffers("different namespace prefix", "t", "e", Seq("t:test"))
   }
 
@@ -160,7 +161,7 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     XmlCompare.compare(
       <t:test xmlns:t="http://example.com"/>,
       <t:test xmlns:t="http://example.com"/>,
-      Set.empty
+      DiffOptions.empty
     ) shouldBe XmlEqual
   }
 
@@ -168,7 +169,7 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     XmlCompare.compare(
       <t:test xmlns:t="http://example.com"/>,
       <e:test xmlns:e="http://example.com"/>,
-      Set(IgnoreNamespace)
+      DiffOptions(IgnoreNamespace)
     ) shouldBe XmlEqual
   }
 
@@ -176,7 +177,7 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     XmlCompare.compare(
       <t:test xmlns:t="http://example.com"/>,
       <t:test xmlns:e="http://example.org"/>,
-      Set(IgnoreNamespace)
+      DiffOptions(IgnoreNamespace)
     ) shouldBe XmlEqual
   }
 
@@ -184,7 +185,7 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     XmlCompare.compare(
       <test first="a" second="b" />,
       <test first="a" second="b" />,
-      Set(StrictAttributeOrdering)
+      DiffOptions(StrictAttributeOrdering)
     ) shouldBe XmlEqual
   }
 
@@ -192,7 +193,7 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     XmlCompare.compare(
       <test first="a" second="b"/>,
       <test second="b" first="a"/>,
-      Set(StrictAttributeOrdering)
+      DiffOptions(StrictAttributeOrdering)
     ) shouldBe XmlDiffers(
       "different attribute ordering",
       Seq("first", "second"),
@@ -205,7 +206,7 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     XmlCompare.compare(
       <test><child-a/><child-b/><child-a/></test>,
       <test><child-a/><child-b/><child-a/></test>,
-      Set(IgnoreChildOrder)
+      DiffOptions(IgnoreChildOrder)
     ) shouldBe XmlEqual
   }
 
@@ -213,7 +214,7 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     XmlCompare.compare(
       <test><child-a/><child-b/><child-a/></test>,
       <test><child-b/><child-a/><child-a/></test>,
-      Set(IgnoreChildOrder)
+      DiffOptions(IgnoreChildOrder)
     ) shouldBe XmlEqual
   }
 
@@ -221,7 +222,7 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     XmlCompare.compare(
       <test><child value="a"/><child value="b"/><child value="c"/></test>,
       <test><child value="b"/><child value="a"/><child value="c"/></test>,
-      Set(IgnoreChildOrder)
+      DiffOptions(IgnoreChildOrder)
     ) shouldBe XmlEqual
   }
 
@@ -229,7 +230,7 @@ class XmlCompareSpec extends FlatSpec with Matchers {
     XmlCompare.compare(
       <test><child first="a" second="b"/><child second="1" first="2"/></test>,
       <test><child second="1" first="2"/><child second="b" first="a"/></test>,
-      Set(IgnoreChildOrder)
+      DiffOptions(IgnoreChildOrder)
     ) shouldBe XmlEqual
   }
 }

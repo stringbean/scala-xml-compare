@@ -68,7 +68,7 @@ class XmlMatchersSpec extends FlatSpec with Matchers with XmlMatchers {
   }
 
   "beXml(xml)(options)" should "not match XML with different namespace" in {
-    val matcher = beXml(<ns1:test>text</ns1:test>)(Set.empty)
+    val matcher = beXml(<ns1:test>text</ns1:test>)(DiffOptions.empty)
 
     val matchResult = matcher(<ns2:test>text</ns2:test>)
     matchResult.matches shouldBe false
@@ -76,7 +76,7 @@ class XmlMatchersSpec extends FlatSpec with Matchers with XmlMatchers {
   }
 
   "beXml(xml) with implicit options" should "not match XML with different namespace" in {
-    implicit val options: DiffOptions = Set.empty
+    implicit val options: DiffOptions = DiffOptions.empty
     val matcher = beXml(<ns1:test>text</ns1:test>)
 
     val matchResult = matcher(<ns2:test>text</ns2:test>)

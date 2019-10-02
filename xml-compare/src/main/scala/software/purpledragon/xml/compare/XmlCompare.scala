@@ -28,15 +28,10 @@ import scala.xml._
 object XmlCompare {
   private type Check = (Node, Node, DiffOptions, Seq[String]) => XmlDiff
 
-  private implicit val NodeOrdering = NormalisedNodeOrdering
+  private implicit val NodeOrdering: NormalisedNodeOrdering.type = NormalisedNodeOrdering
 
-  /**
-   * Default [[software.purpledragon.xml.compare.options.DiffOption.DiffOption DiffOption]]s to use during XML comparison.
-   *
-   * Currently these are:
-   *  - [[software.purpledragon.xml.compare.options.DiffOption.IgnoreNamespacePrefix IgnoreNamespacePrefix]]
-   */
-  val DefaultOptions: DiffOptions = Set(IgnoreNamespacePrefix)
+  @deprecated(message = "use DiffOptions.Default", since = "2.0.0")
+  val DefaultOptions: DiffOptions = DiffOptions.default
 
   /**
    * Compares two XML documents. This will perform a recursive scan of all the nodes in each document, checking each
@@ -47,7 +42,7 @@ object XmlCompare {
    * @param options configuration options to control the way the comparison is performed.
    * @return results of the XML comparison.
    */
-  def compare(left: Node, right: Node, options: DiffOptions = DefaultOptions): XmlDiff = {
+  def compare(left: Node, right: Node, options: DiffOptions = DiffOptions.default): XmlDiff = {
     compareNodes(left, right, options, Nil)
   }
 
@@ -72,10 +67,10 @@ object XmlCompare {
   private def compareNamespace(left: Node, right: Node, options: DiffOptions, path: Seq[String]): XmlDiff = {
     if (left.label != right.label) {
       XmlDiffers("different label", left.label, right.label, extendPath(path, left))
-    } else if (left.namespace != right.namespace && !options.contains(IgnoreNamespace)) {
+    } else if (left.namespace != right.namespace && options.isDisabled(IgnoreNamespace)) {
       XmlDiffers("different namespace", left.namespace, right.namespace, extendPath(path, left))
-    } else if (left.prefix != right.prefix && !options.contains(IgnoreNamespacePrefix) &&
-               !options.contains(IgnoreNamespace)) {
+    } else if (left.prefix != right.prefix && options.isDisabled(IgnoreNamespacePrefix) &&
+               options.isDisabled(IgnoreNamespace)) {
       XmlDiffers("different namespace prefix", left.prefix, right.prefix, extendPath(path, left))
     } else {
       XmlEqual
@@ -88,7 +83,7 @@ object XmlCompare {
 
     if (leftKeys.sorted != rightKeys.sorted) {
       XmlDiffers("different attribute names", leftKeys.sorted, rightKeys.sorted, extendPath(path, left))
-    } else if (options.contains(StrictAttributeOrdering) && leftKeys != rightKeys) {
+    } else if (options.isEnabled(StrictAttributeOrdering) && leftKeys != rightKeys) {
       XmlDiffers("different attribute ordering", leftKeys, rightKeys, extendPath(path, left))
     } else {
       leftKeys.sorted collectFirst {
@@ -134,7 +129,7 @@ object XmlCompare {
   }
 
   private def normalise(nodes: Seq[Node], options: DiffOptions): Seq[Node] = {
-    val sort = options.contains(DiffOption.IgnoreChildOrder)
+    val sort = options.isEnabled(DiffOption.IgnoreChildOrder)
     val filtered = nodes.filterNot(n => n.isInstanceOf[Atom[_]])
 
     if (sort) {
