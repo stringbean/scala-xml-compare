@@ -14,7 +14,7 @@
 Add the following to your `build.sbt`:
 
 ```scala
-libraryDependencies += "purpledragon.software.xml" %% "xml-compare" % "<version>"
+libraryDependencies += "software.purpledragon.xml" %% "xml-compare" % "<version>"
 ```
 
 You can then compare XML using:
@@ -32,7 +32,7 @@ val result = XmlCompare.compare(doc1, doc2)
 A companion library is provided for testing XML in Scalatest:
 
 ```scala
-libraryDependencies += "purpledragon.software.xml" %% "xml-scalatest" % "<version>" % Test
+libraryDependencies += "software.purpledragon.xml" %% "xml-scalatest" % "<version>" % Test
 ```
 
 This then enables the `beXml` matcher:
@@ -47,5 +47,5 @@ doc should beXml(<person><name>John Smith</name></person>)
 Similarly a companion library for specs2 is provided:
 
 ```scala
-libraryDependencies += "purpledragon.software.xml" %% "xml-specs2" % "<version>" % Test
+libraryDependencies += "software.purpledragon.xml" %% "xml-specs2" % "<version>" % Test
 ```
