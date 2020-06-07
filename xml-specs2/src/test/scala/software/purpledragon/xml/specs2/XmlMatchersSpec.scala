@@ -73,7 +73,7 @@ class XmlMatchersSpec extends Specification with XmlMatchers with Expectations {
 
   "beXml(xml)(options)" should {
     "not match XML with different namespace" in {
-      val matcher = beXml(<ns1:test>text</ns1:test>)(Set.empty)
+      val matcher = beXml(<ns1:test>text</ns1:test>)(DiffOptions.empty)
 
       val matchResult = matcher(createExpectable(<ns2:test>text</ns2:test>))
       matchResult.isSuccess === false
@@ -83,7 +83,7 @@ class XmlMatchersSpec extends Specification with XmlMatchers with Expectations {
 
   "beXml(xml) with implicit options" should {
     "not match XML with different namespace" in {
-      implicit val options: DiffOptions = Set.empty
+      implicit val options: DiffOptions = DiffOptions.empty
       val matcher = beXml(<ns1:test>text</ns1:test>)
 
       val matchResult = matcher(createExpectable(<ns2:test>text</ns2:test>))

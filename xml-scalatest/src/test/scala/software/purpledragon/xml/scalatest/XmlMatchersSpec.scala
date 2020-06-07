@@ -16,10 +16,11 @@
 
 package software.purpledragon.xml.scalatest
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import software.purpledragon.xml.compare.options.DiffOptions
 
-class XmlMatchersSpec extends FlatSpec with Matchers with XmlMatchers {
+class XmlMatchersSpec extends AnyFlatSpec with Matchers with XmlMatchers {
   "beXml(xml)" should "match identical XML" in {
     val matcher = beXml(<test>text</test>)
 
@@ -68,7 +69,7 @@ class XmlMatchersSpec extends FlatSpec with Matchers with XmlMatchers {
   }
 
   "beXml(xml)(options)" should "not match XML with different namespace" in {
-    val matcher = beXml(<ns1:test>text</ns1:test>)(Set.empty)
+    val matcher = beXml(<ns1:test>text</ns1:test>)(DiffOptions.empty)
 
     val matchResult = matcher(<ns2:test>text</ns2:test>)
     matchResult.matches shouldBe false
@@ -76,7 +77,7 @@ class XmlMatchersSpec extends FlatSpec with Matchers with XmlMatchers {
   }
 
   "beXml(xml) with implicit options" should "not match XML with different namespace" in {
-    implicit val options: DiffOptions = Set.empty
+    implicit val options: DiffOptions = DiffOptions.empty
     val matcher = beXml(<ns1:test>text</ns1:test>)
 
     val matchResult = matcher(<ns2:test>text</ns2:test>)

@@ -16,9 +16,10 @@
 
 package software.purpledragon.xml
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class XmlUtilsSpec extends FlatSpec with Matchers {
+class XmlUtilsSpec extends AnyFlatSpec with Matchers {
   "XmlUtils.extractAttributes" should "return empty values for no attributes" in {
     XmlUtils.extractAttributes(<empty/>) shouldBe (Nil, Map.empty[String, String])
   }

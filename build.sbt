@@ -5,8 +5,8 @@ import sbtrelease.ReleasePlugin.autoImport._
 inThisBuild(
   Seq(
     organization := "software.purpledragon.xml",
-    scalaVersion := "2.13.1",
-    crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.12.10"),
+    scalaVersion := "2.13.2",
+    crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.12.11"),
     licenses += ("Apache-2.0", url("https://opensource.org/licenses/Apache-2.0")),
     developers := List(
       Developer("stringbean", "Michael Stringer", "@the_stringbean", url("https://github.com/stringbean"))
@@ -24,7 +24,7 @@ inThisBuild(
     scalacOptions ++= Seq(s"-target:jvm-$javaVersion", "-deprecation", "-feature", "-unchecked"),
     // dependencies common for all sub-projects
     libraryDependencies ++= Seq(
-      "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
+      "org.scala-lang.modules" %% "scala-xml" % "1.3.0"
     ),
   ))
 
@@ -70,6 +70,7 @@ lazy val root = Project("scala-xml-compare", file("."))
     ),
     // sbt-release settings
     releaseCrossBuild := true,
+    releaseVcsSign := true,
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,

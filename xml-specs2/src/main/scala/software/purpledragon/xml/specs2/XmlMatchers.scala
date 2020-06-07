@@ -41,33 +41,31 @@ trait XmlMatchers {
    *   result must beXml(<example>1</example>)
    * }}}
    *
-   * If unspecified this will use [[software.purpledragon.xml.compare.XmlCompare.DefaultOptions XmlCompare.DefaultOptions]]
-   * during the comparison. This can be overridden with a global implicit of
-   * [[software.purpledragon.xml.compare.options.DiffOptions DiffOptions]] or on an individual basis:
+   * If unspecified this will use [[DiffOptions.default]] during the comparison. This can be overridden with a global
+   * implicit of [[DiffOptions]] or on an individual basis:
    *
    * {{{
-   *   implicit val diffOptions: DiffOptions = Set(IgnoreNamespace)
+   *   implicit val diffOptions: DiffOptions = DiffOptions(IgnoreNamespace)
    *   result must beXml(<example>1</example>)
    *
    *   // or
-   *   result must beXml(<example>1</example>)(Set.empty)
+   *   result must beXml(<example>1</example>)(DiffOptions.empty)
    * }}}
    */
-  def beXml(expected: Node)(implicit options: DiffOptions = XmlCompare.DefaultOptions): Matcher[Node] = {
-    actual: Node =>
-      val diff = XmlCompare.compare(expected, actual, options)
+  def beXml(expected: Node)(implicit options: DiffOptions = DiffOptions.default): Matcher[Node] = { actual: Node =>
+    val diff = XmlCompare.compare(expected, actual, options)
 
-      val failureBuilder = new StringBuilder()
-      failureBuilder ++= "XML did not match"
+    val failureBuilder = new StringBuilder()
+    failureBuilder ++= "XML did not match"
 
-      if (diff.failurePath.nonEmpty) {
-        failureBuilder ++= " at "
-        diff.failurePath.addString(failureBuilder, "[", " / ", "]")
-      }
+    if (diff.failurePath.nonEmpty) {
+      failureBuilder ++= " at "
+      diff.failurePath.addString(failureBuilder, "[", " / ", "]")
+    }
 
-      failureBuilder ++= ": "
-      failureBuilder ++= diff.message
+    failureBuilder ++= ": "
+    failureBuilder ++= diff.message
 
-      (diff.isEqual, "XML matched", failureBuilder.toString())
+    (diff.isEqual, "XML matched", failureBuilder.toString())
   }
 }

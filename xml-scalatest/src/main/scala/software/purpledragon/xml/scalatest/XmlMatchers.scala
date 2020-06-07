@@ -40,19 +40,18 @@ trait XmlMatchers {
    *   result should beXml(<example>1</example>)
    * }}}
    *
-   * If unspecified this will use [[software.purpledragon.xml.compare.XmlCompare.DefaultOptions XmlCompare.DefaultOptions]]
-   * during the comparison. This can be overridden with a global implicit of
-   * [[software.purpledragon.xml.compare.options.DiffOptions DiffOptions]] or on an individual basis:
+   * If unspecified this will use [[DiffOptions.default]] during the comparison. This can be overridden with a global
+   * implicit of [[DiffOptions]] or on an individual basis:
    *
    * {{{
-   *   implicit val diffOptions: DiffOptions = Set(IgnoreNamespace)
+   *   implicit val diffOptions: DiffOptions = DiffOptions(IgnoreNamespace)
    *   result should beXml(<example>1</example>)
    *
    *   // or
-   *   result should beXml(<example>1</example>)(Set.empty)
+   *   result should beXml(<example>1</example>)(DiffOptions.empty)
    * }}}
    */
-  def beXml(expected: Node)(implicit options: DiffOptions = XmlCompare.DefaultOptions): Matcher[Node] =
+  def beXml(expected: Node)(implicit options: DiffOptions = DiffOptions.default): Matcher[Node] =
     new XmlMatcher(expected, options)
 
   private class XmlMatcher(expected: Node, options: DiffOptions) extends Matcher[Node] {
