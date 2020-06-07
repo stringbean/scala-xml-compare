@@ -31,7 +31,7 @@
 <span class="home-icon">⌂</span>scala-xml-compare
 </a>
 <div class="version-number">
-1.2.0
+2.0.0
 </div>
 <div class="scaladoc">
 <a href="api/index.html"><span class="home-icon">§</span>Scaladocs</a>
@@ -72,7 +72,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <span class="home-icon">⌂</span>scala-xml-compare
 </a>
 <div class="version-number">
-1.2.0
+2.0.0
 </div>
 <div class="scaladoc">
 <a href="api/index.html"><span class="home-icon">§</span>Scaladocs</a>
@@ -107,14 +107,14 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
 <h1><a href="#comparing-xml" name="comparing-xml" class="anchor"><span class="anchor-link"></span></a>Comparing XML</h1>
-<p>A simple XML comparison can be performed using <a href="api/software/purpledragon/xml/compare/XmlCompare$.html"><code>XmlCompare.compare</code></a>: </p>
+<p>A simple XML comparison can be performed using <a href="api/software/purpledragon/xml/compare/XmlCompare$.html" title="software.purpledragon.xml.compare.XmlCompare"><code>XmlCompare.compare</code></a>: </p>
 <pre class="prettyprint"><code class="language-scala">// using XML literals:
 val result = XmlCompare.compare(&lt;test/&gt;, &lt;test/&gt;) // == XmlEqual
 
 // or from a file:
 val success = XmlCompare.compare(&lt;result&gt;&lt;success/&gt;&lt;/result&gt;, XML.loadFile(&quot;result.xml&quot;))
 </code></pre>
-<p>The way that XML is compared can be customised by supplying a <code>Set</code> of <a href="api/software/purpledragon/xml/compare/options/DiffOption$.html"><code>DiffOption</code>s</a>:</p>
+<p>The way that XML is compared can be customised by supplying <a href="api/software/purpledragon/xml/compare/options/DiffOptions.html" title="software.purpledragon.xml.compare.options.DiffOptions"><code>DiffOptions</code></a>:</p>
 <pre class="prettyprint"><code class="language-scala">// this would result an XmlEqual
 XmlCompare.compare(
   &lt;test name=&quot;John&quot; age=&quot;45&quot;/&gt;,
@@ -124,11 +124,11 @@ XmlCompare.compare(
 XmlCompare.compare(
   &lt;test name=&quot;John&quot; age=&quot;45&quot;/&gt;,
   &lt;test age=&quot;45&quot; name=&quot;John&quot;/&gt;,
-  Set(DiffOption.StrictAttributeOrdering))
+  DiffOptions(DiffOption.StrictAttributeOrdering))
 </code></pre>
 <p><a href="comparing-xml.html#comparison-options">Comparison Options</a> contains details of the supported options.</p>
 <h2><a href="#comparison-results" name="comparison-results" class="anchor"><span class="anchor-link"></span></a>Comparison Results</h2>
-<p><code>XmlCompare.compare</code> returns an <a href="api/software/purpledragon/xml/compare/XmlDiff.html"><code>XmlDiff</code></a> that will either be <a href="api/software/purpledragon/xml/compare/XmlEqual.html"><code>XmlEqual</code></a> or a detailed <a href="api/software/purpledragon/xml/compare/XmlDiffers.html"><code>XmlDiffers</code></a>. If a simple pass/fail check is required then the <code>isEqual</code> method can be called on the result.</p>
+<p><code>XmlCompare.compare</code> returns an <a href="api/software/purpledragon/xml/compare/XmlDiff.html" title="software.purpledragon.xml.compare.XmlDiff"><code>XmlDiff</code></a> that will either be <a href="api/software/purpledragon/xml/compare/XmlEqual.html" title="software.purpledragon.xml.compare.XmlEqual"><code>XmlEqual</code></a> or a detailed <a href="api/software/purpledragon/xml/compare/XmlDiffers.html" title="software.purpledragon.xml.compare.XmlDiffers"><code>XmlDiffers</code></a>. If a simple pass/fail check is required then the <code>isEqual</code> method can be called on the result.</p>
 <h3><a href="#xmlequal" name="xmlequal" class="anchor"><span class="anchor-link"></span></a>XmlEqual</h3>
 <p>An <code>XmlEqual</code> result signifies that no differences in the XML were found.</p>
 <h3><a href="#xmldiffers" name="xmldiffers" class="anchor"><span class="anchor-link"></span></a>XmlDiffers</h3>
@@ -142,31 +142,39 @@ XmlCompare.compare(
 )
 </code></pre>
 <h2><a href="#comparison-options" name="comparison-options" class="anchor"><span class="anchor-link"></span></a>Comparison Options</h2>
-<p>By default the following options are used:</p>
+<h3><a href="#building-options" name="building-options" class="anchor"><span class="anchor-link"></span></a>Building Options</h3>
+<p>Options can built by either passing them into <a href="api/software/purpledragon/xml/compare/options/DiffOptions.html" title="software.purpledragon.xml.compare.options.DiffOptions"><code>DiffOptions()</code></a>) or by combining them:</p>
+<pre class="prettyprint"><code class="language-scala">// these two are equivalent:
+DiffOptions(DiffOption.IgnoreNamespacePrefix, DiffOption.IgnoreNamespace)
+DiffOptions(DiffOption.IgnoreNamespacePrefix) &amp; DiffOption.IgnoreNamespace
+</code></pre>
+<h3><a href="#default-options" name="default-options" class="anchor"><span class="anchor-link"></span></a>Default Options</h3>
+<p>The default options (unspecified or <a href="api/software/purpledragon/xml/compare/options/DiffOptions$.html" title="software.purpledragon.xml.compare.options.DiffOptions"><code>DiffOptions.default</code></a>) are:</p>
 <ul>
   <li><code>IgnoreNamespacePrefix</code></li>
 </ul>
-<h3><a href="#ignorenamespaceprefix" name="ignorenamespaceprefix" class="anchor"><span class="anchor-link"></span></a>IgnoreNamespacePrefix</h3>
+<h3><a href="#available-options" name="available-options" class="anchor"><span class="anchor-link"></span></a>Available Options</h3>
+<h4><a href="#ignorenamespaceprefix" name="ignorenamespaceprefix" class="anchor"><span class="anchor-link"></span></a>IgnoreNamespacePrefix</h4>
 <p>If enabled the prefixes associated with namespaces will be ignored. Differing namespaces will still cause a comparison error.</p>
-<h4><a href="#example" name="example" class="anchor"><span class="anchor-link"></span></a>Example</h4>
+<h5><a href="#example" name="example" class="anchor"><span class="anchor-link"></span></a>Example</h5>
 <p>This:</p>
 <pre class="prettyprint"><code class="language-xml">&lt;t:example xmlns:t=&quot;http://example.com&quot;&gt;5&lt;/t:example&gt;
 </code></pre>
 <p>would be considered equal to:</p>
 <pre class="prettyprint"><code class="language-xml">&lt;f:example xmlns:f=&quot;http://example.com&quot;&gt;5&lt;/f:example&gt;
 </code></pre>
-<h3><a href="#ignorenamespace" name="ignorenamespace" class="anchor"><span class="anchor-link"></span></a>IgnoreNamespace</h3>
+<h4><a href="#ignorenamespace" name="ignorenamespace" class="anchor"><span class="anchor-link"></span></a>IgnoreNamespace</h4>
 <p>If enabled then namespaces will be ignored completely.</p>
-<h4><a href="#example" name="example" class="anchor"><span class="anchor-link"></span></a>Example</h4>
+<h5><a href="#example" name="example" class="anchor"><span class="anchor-link"></span></a>Example</h5>
 <p>This:</p>
 <pre class="prettyprint"><code class="language-xml">&lt;t:example xmlns:t=&quot;http://example.com&quot;&gt;5&lt;/t:example&gt;
 </code></pre>
 <p>would be considered equal to:</p>
 <pre class="prettyprint"><code class="language-xml">&lt;f:example xmlns:f=&quot;http://example.org&quot;&gt;5&lt;/f:example&gt;
 </code></pre>
-<h3><a href="#strictattributeordering" name="strictattributeordering" class="anchor"><span class="anchor-link"></span></a>StrictAttributeOrdering</h3>
+<h4><a href="#strictattributeordering" name="strictattributeordering" class="anchor"><span class="anchor-link"></span></a>StrictAttributeOrdering</h4>
 <p>This adds an additional comparison on the ordering of element attributes. The presence of attributes will be checked <em>before</em> the ordering.</p>
-<h4><a href="#example" name="example" class="anchor"><span class="anchor-link"></span></a>Example</h4>
+<h5><a href="#example" name="example" class="anchor"><span class="anchor-link"></span></a>Example</h5>
 <p>This:</p>
 <pre class="prettyprint"><code class="language-xml">&lt;example first=&quot;a&quot; second=&quot;b&quot; /&gt;
 </code></pre>
@@ -181,10 +189,10 @@ XmlCompare.compare(
   Seq(&quot;test&quot;)
 )
 </code></pre>
-<h3><a href="#ignorechildorder" name="ignorechildorder" class="anchor"><span class="anchor-link"></span></a>IgnoreChildOrder</h3>
+<h4><a href="#ignorechildorder" name="ignorechildorder" class="anchor"><span class="anchor-link"></span></a>IgnoreChildOrder</h4>
 <p>If enabled the ordering of child elements will be ignored. This is handled by re-ordering child nodes using an arbitrary sorting algorithm before comparing them.</p>
 <p><em>Note: the first difference returned may be different if this option is enabled.</em> </p>
-<h4><a href="#example-1" name="example-1" class="anchor"><span class="anchor-link"></span></a>Example 1</h4>
+<h5><a href="#example-1" name="example-1" class="anchor"><span class="anchor-link"></span></a>Example 1</h5>
 <p>This:</p>
 <pre class="prettyprint"><code class="language-xml">&lt;example&gt;
   &lt;child-1/&gt;
@@ -197,7 +205,7 @@ XmlCompare.compare(
   &lt;child-1/&gt;
 &lt;/example&gt;
 </code></pre>
-<h4><a href="#example-2" name="example-2" class="anchor"><span class="anchor-link"></span></a>Example 2</h4>
+<h5><a href="#example-2" name="example-2" class="anchor"><span class="anchor-link"></span></a>Example 2</h5>
 <p>This:</p>
 <pre class="prettyprint"><code class="language-xml">&lt;example&gt;
   &lt;child-1 attribute1=&quot;value-1&quot; attribute2=&quot;value-2&quot;/&gt;
@@ -212,7 +220,7 @@ XmlCompare.compare(
 </code></pre>
 <p><em>(The ordering of nodes and attributes are both ignored)</em> </p>
 <div class="source-github">
-The source code for this page can be found <a href="https://github.com/stringbean/scala-xml-compare/tree/v1.2.0/src/main/paradox/comparing-xml.md">here</a>.
+The source code for this page can be found <a href="https://github.com/stringbean/scala-xml-compare/tree/v2.0.0/src/main/paradox/comparing-xml.md">here</a>.
 </div>
 
 <div class="nav-next">
@@ -234,10 +242,9 @@ The source code for this page can be found <a href="https://github.com/stringbea
     </ul></li>
     <li><a href="comparing-xml.html#comparison-options" class="header">Comparison Options</a>
     <ul>
-      <li><a href="comparing-xml.html#ignorenamespaceprefix" class="header">IgnoreNamespacePrefix</a></li>
-      <li><a href="comparing-xml.html#ignorenamespace" class="header">IgnoreNamespace</a></li>
-      <li><a href="comparing-xml.html#strictattributeordering" class="header">StrictAttributeOrdering</a></li>
-      <li><a href="comparing-xml.html#ignorechildorder" class="header">IgnoreChildOrder</a></li>
+      <li><a href="comparing-xml.html#building-options" class="header">Building Options</a></li>
+      <li><a href="comparing-xml.html#default-options" class="header">Default Options</a></li>
+      <li><a href="comparing-xml.html#available-options" class="header">Available Options</a></li>
     </ul></li>
   </ul></li>
 </ul>
@@ -281,7 +288,7 @@ The source code for this page can be found <a href="https://github.com/stringbea
 
 <!--
 <div class="copyright">
-<span class="text">&copy; 2019</span>
+<span class="text">&copy; 2020</span>
 <a href="https://www.example.com" class="logo">logo</a>
 </div>
 -->
@@ -306,7 +313,7 @@ The source code for this page can be found <a href="https://github.com/stringbea
 <script type="text/javascript" src="lib/prettify/prettify.js"></script>
 <script type="text/javascript" src="lib/prettify/lang-scala.js"></script>
 <script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
-<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.2.0', 'https://stringbean.github.io/scala-xml-compare')});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '2.0.0', 'https://stringbean.github.io/scala-xml-compare')});</script>
 
 
 </html>
