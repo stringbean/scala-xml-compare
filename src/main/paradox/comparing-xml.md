@@ -1,7 +1,7 @@
 # Comparing XML
 
 A simple XML comparison can be performed using
-@scaladoc[`XmlCompare.compare`](software.purpledragon.xml.compare.XmlCompare$): 
+@scaladoc[XmlCompare.compare](software.purpledragon.xml.compare.XmlCompare$): 
 
 ```scala
 // using XML literals:
@@ -11,8 +11,8 @@ val result = XmlCompare.compare(<test/>, <test/>) // == XmlEqual
 val success = XmlCompare.compare(<result><success/></result>, XML.loadFile("result.xml"))
 ```
 
-The way that XML is compared can be customised by supplying a `Set` of
-@scaladoc[`DiffOption`s](software.purpledragon.xml.compare.options.DiffOption$):
+The way that XML is compared can be customised by supplying
+@scaladoc[DiffOptions](software.purpledragon.xml.compare.options.DiffOptions):
 
 ```scala
 // this would result an XmlEqual
@@ -24,16 +24,16 @@ XmlCompare.compare(
 XmlCompare.compare(
   <test name="John" age="45"/>,
   <test age="45" name="John"/>,
-  Set(DiffOption.StrictAttributeOrdering))
+  DiffOptions(DiffOption.StrictAttributeOrdering))
 ```
 
 @ref:[Comparison Options](#comparison-options) contains details of the supported options.
 
 ## Comparison Results
 
-`XmlCompare.compare` returns an @scaladoc[`XmlDiff`](software.purpledragon.xml.compare.XmlDiff) that will either be
-@scaladoc[`XmlEqual`](software.purpledragon.xml.compare.XmlEqual) or a detailed 
-@scaladoc[`XmlDiffers`](software.purpledragon.xml.compare.XmlDiffers). If a simple
+`XmlCompare.compare` returns an @scaladoc[XmlDiff](software.purpledragon.xml.compare.XmlDiff) that will either be
+@scaladoc[XmlEqual](software.purpledragon.xml.compare.XmlEqual) or a detailed 
+@scaladoc[XmlDiffers](software.purpledragon.xml.compare.XmlDiffers). If a simple
 pass/fail check is required then the `isEqual` method can be called on the result.
 
 ### XmlEqual
@@ -59,16 +59,33 @@ XmlDiffers(
 
 ## Comparison Options
 
-By default the following options are used:
+### Building Options
+
+Options can built by either passing them into
+@scaladoc[DiffOptions()](software.purpledragon.xml.compare.options.DiffOptions)) or by combining them:
+
+```scala
+// these two are equivalent:
+DiffOptions(DiffOption.IgnoreNamespacePrefix, DiffOption.IgnoreNamespace)
+DiffOptions(DiffOption.IgnoreNamespacePrefix) & DiffOption.IgnoreNamespace
+``` 
+
+
+### Default Options
+
+The default options (unspecified or
+@scaladoc[DiffOptions.default](software.purpledragon.xml.compare.options.DiffOptions$)) are:
 
 * `IgnoreNamespacePrefix`
 
-### IgnoreNamespacePrefix
+### Available Options
+
+#### IgnoreNamespacePrefix
 
 If enabled the prefixes associated with namespaces will be ignored. Differing namespaces will still cause a comparison
 error.
 
-#### Example
+##### Example
 
 This:
 ```xml
@@ -80,11 +97,11 @@ would be considered equal to:
 <f:example xmlns:f="http://example.com">5</f:example>
 ```
 
-### IgnoreNamespace
+#### IgnoreNamespace
 
 If enabled then namespaces will be ignored completely.
 
-#### Example
+##### Example
 
 This:
 ```xml
@@ -96,12 +113,12 @@ would be considered equal to:
 <f:example xmlns:f="http://example.org">5</f:example>
 ```
 
-### StrictAttributeOrdering
+#### StrictAttributeOrdering
 
 This adds an additional comparison on the ordering of element attributes. The presence of attributes will be checked
 _before_ the ordering.
 
-#### Example
+##### Example
 
 This:
 
@@ -126,14 +143,14 @@ XmlDiffers(
 )
 ```
 
-### IgnoreChildOrder
+#### IgnoreChildOrder
 
 If enabled the ordering of child elements will be ignored. This is handled by re-ordering child nodes using an arbitrary
 sorting algorithm before comparing them.
 
 _Note: the first difference returned may be different if this option is enabled._ 
 
-#### Example 1
+##### Example 1
 
 This:
 
@@ -152,7 +169,7 @@ would be considered equal to:
 </example>
 ```
 
-#### Example 2
+##### Example 2
 
 This:
 

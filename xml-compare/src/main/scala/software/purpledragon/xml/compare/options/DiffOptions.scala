@@ -25,18 +25,36 @@ object DiffOptions {
    *  - [[DiffOption.IgnoreNamespacePrefix IgnoreNamespacePrefix]]
    */
   val default: DiffOptions = DiffOptions(DiffOption.IgnoreNamespacePrefix)
+
+  /**
+   * Empty set of [[DiffOption DiffOption]]s.
+   */
   val empty: DiffOptions = DiffOptions()
 
+  /**
+   * Creates a `DiffOptions` with the supplied list of [[DiffOption DiffOption]]s.
+   */
   def apply(options: DiffOption.DiffOption*): DiffOptions = DiffOptions(options.toSet)
 }
 
+/**
+ * Collection of [[DiffOption DiffOption]]s to control XML comparison.
+ *
+ * @param options set of enabled options.
+ */
 case class DiffOptions(options: Set[DiffOption.DiffOption]) {
+  /** Creates a new `DiffOptions` with the supplied option added. */
   def &(option: DiffOption.DiffOption): DiffOptions = copy(options = options + option)
+  /** Creates a new `DiffOptions` with the supplied option removed. */
   def &!(option: DiffOption.DiffOption): DiffOptions = copy(options = options - option)
 
+  /** Creates a new `DiffOptions` with the supplied option added. */
   def +(option: DiffOption.DiffOption): DiffOptions = copy(options = options + option)
+  /** Creates a new `DiffOptions` with the supplied option removed. */
   def -(option: DiffOption.DiffOption): DiffOptions = copy(options = options - option)
 
+  /** Tests whether the supplied option is enabled. */
   def isEnabled(option: DiffOption.DiffOption): Boolean = options.contains(option)
+  /** Tests whether the supplied option is disabled. */
   def isDisabled(option: DiffOption.DiffOption): Boolean = !options.contains(option)
 }
