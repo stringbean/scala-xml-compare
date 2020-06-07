@@ -24,7 +24,7 @@ inThisBuild(
     scalacOptions ++= Seq(s"-target:jvm-$javaVersion", "-deprecation", "-feature", "-unchecked"),
     // dependencies common for all sub-projects
     libraryDependencies ++= Seq(
-      "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
+      "org.scala-lang.modules" %% "scala-xml" % "1.3.0"
     ),
   ))
 
