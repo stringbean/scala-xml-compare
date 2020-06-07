@@ -16,10 +16,11 @@
 
 package software.purpledragon.xml.scalatest
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import software.purpledragon.xml.compare.options.DiffOptions
 
-class XmlMatchersSpec extends FlatSpec with Matchers with XmlMatchers {
+class XmlMatchersSpec extends AnyFlatSpec with Matchers with XmlMatchers {
   "beXml(xml)" should "match identical XML" in {
     val matcher = beXml(<test>text</test>)
 

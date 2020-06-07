@@ -16,11 +16,12 @@
 
 package software.purpledragon.xml.compare
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import software.purpledragon.xml.compare.options.DiffOption._
 import software.purpledragon.xml.compare.options.DiffOptions
 
-class XmlCompareSpec extends FlatSpec with Matchers {
+class XmlCompareSpec extends AnyFlatSpec with Matchers {
 
   "compare with defaults" should "match same empty element" in {
     XmlCompare.compare(<test/>, <test/>) shouldBe XmlEqual

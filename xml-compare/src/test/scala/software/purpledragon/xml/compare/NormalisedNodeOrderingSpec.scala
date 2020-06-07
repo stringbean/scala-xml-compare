@@ -16,11 +16,12 @@
 
 package software.purpledragon.xml.compare
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.xml.{Comment, Node, PCData, Text}
 
-class NormalisedNodeOrderingSpec extends FlatSpec with Matchers {
+class NormalisedNodeOrderingSpec extends AnyFlatSpec with Matchers {
   private implicit val ordering: Ordering[Node] = NormalisedNodeOrdering
 
   "NormalisedNodeOrdering" should "order nodes by type" in {
