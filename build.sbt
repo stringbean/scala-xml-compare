@@ -53,6 +53,7 @@ lazy val root = Project("scala-xml-compare", file("."))
     xmlSpecs2
   )
   .settings(
+    skip in publish := true,
     publishArtifact := false,
     // ghpages
     git.remoteRepo := scmInfo.value.get.connection.replace("scm:git:", ""),
