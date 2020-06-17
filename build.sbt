@@ -77,6 +77,7 @@ lazy val root = Project("scala-xml-compare", file("."))
       inquireVersions,
       runClean,
       runTest,
+      releaseStepTask(mimaReportBinaryIssues),
       setReleaseVersion,
       commitReleaseVersion,
       tagRelease,
@@ -88,3 +89,4 @@ lazy val root = Project("scala-xml-compare", file("."))
     )
   )
   .enablePlugins(ScalaUnidocPlugin, GhpagesPlugin, ParadoxSitePlugin)
+  .disablePlugins(MimaPlugin)

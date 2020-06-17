@@ -20,7 +20,7 @@ jobs:
   include:
     # run tests against all Scala versions & JDKs
     - stage: Test
-      script: sbt +test
+      script: sbt +test +mimaReportBinaryIssues
     # coverage only runs on 2.12 openjdk8
     - stage: Coverage
       script: sbt ++2.12.10 coverage test coverageReport coverageAggregate && bash <(curl -s https://codecov.io/bash)
