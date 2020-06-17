@@ -1,9 +1,10 @@
-[![Build Status](https://img.shields.io/travis/stringbean/scala-xml-compare/master.svg)](https://travis-ci.org/stringbean/scala-xml-compare)
+[![Build Status](https://img.shields.io/travis/com/stringbean/scala-xml-compare/master.svg)](https://travis-ci.com/stringbean/scala-xml-compare)
 [![Codacy Grade](https://img.shields.io/codacy/grade/47939504d2cc49b0a7eb21f6bcc5c24d.svg?label=codacy)](https://www.codacy.com/app/stringbean/scala-xml-compare)
 [![Test Coverage](https://img.shields.io/codecov/c/github/stringbean/scala-xml-compare/master.svg)](https://codecov.io/gh/stringbean/scala-xml-compare)
 [![Maven Central - Scala 2.11](https://img.shields.io/maven-central/v/software.purpledragon.xml/xml-compare_2.11.svg?label=scala%202.11)](https://search.maven.org/search?q=g:software.purpledragon.xml%20a:xml-compare_2.11)
 [![Maven Central - Scala 2.12](https://img.shields.io/maven-central/v/software.purpledragon.xml/xml-compare_2.12.svg?label=scala%202.12)](https://search.maven.org/search?q=g:software.purpledragon.xml%20a:xml-compare_2.12)
 [![Maven Central - Scala 2.13](https://img.shields.io/maven-central/v/software.purpledragon.xml/xml-compare_2.13.svg?label=scala%202.13)](https://search.maven.org/search?q=g:software.purpledragon.xml%20a:xml-compare_2.13)
+![MiMa Checked Against](https://img.shields.io/badge/MiMa%20Compatiblitity-2.0.0-brightGreen)
 
 # XML Comparison Utils for Scala
 

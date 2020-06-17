@@ -1,5 +1,5 @@
 language: scala
-sudo: false
+dist: bionic
 
 jdk:
   - openjdk8
@@ -14,14 +14,11 @@ before_cache:
   - find $HOME/.ivy2 -name "*.lock" -delete
   - find $HOME/.sbt -name "*.lock" -delete
 
-# build with scoverage report and upload to codecov
-
 jobs:
   include:
-    # run tests against all Scala versions & JDKs
-    - stage: Test
-      script: sbt +test +mimaReportBinaryIssues
-    # coverage only runs on 2.12 openjdk8
-    - stage: Coverage
+    # coverage only runs on 2.12 openjdk11
+    - jdk: openjdk11
+      stage: Coverage
       script: sbt ++2.12.10 coverage test coverageReport coverageAggregate && bash <(curl -s https://codecov.io/bash)
 
+script: sbt +test +mimaReportBinaryIssues
